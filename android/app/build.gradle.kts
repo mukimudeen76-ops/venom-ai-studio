@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.venom.ai.studio"
+    namespace = "com.betterdeepseek.app"
     compileSdk = 34
 
     buildFeatures {
