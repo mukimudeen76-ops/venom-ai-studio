@@ -49,8 +49,9 @@ export async function pickFolderAndConcatenate(options = {}) {
       continue;
     }
 
-    if (file.size > 2 * 1024 * 1024) {
-      continue;  // skip files > 2MB to avoid freezing
+    // Unlimited large file support: allow large documents up to 50MB
+    if (file.size > 50 * 1024 * 1024) {
+      continue;
     }
 
     try {

@@ -3,14 +3,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Mic button uses SpeechRecognition (browser API). The permission is
-         declared so future native fallbacks remain possible. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!-- Pre-Q downloads land in shared storage. API 29+ uses MediaStore and
-         doesn't need this permission. -->
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <!-- Android 11+ package visibility: required to launch ACTION_VIEW
          intents (file viewers for downloads, external browsers). -->

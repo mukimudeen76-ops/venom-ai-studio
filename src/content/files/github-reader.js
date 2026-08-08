@@ -250,8 +250,8 @@ export async function fetchGitHubRepo(repoUrl, onStatus = () => { }, options = {
     // Check .gitignore
     if (ig.ignores(relativePath)) continue;
 
-    // Check file size (skip > 2MB)
-    if (files[fullPath].length > 2 * 1024 * 1024) continue;
+    // Unlimited large file support: allow large documents up to 50MB
+    if (files[fullPath].length > 50 * 1024 * 1024) continue;
 
     // Only include known text extensions or extensionless files that are small
     const isKnownText = TEXT_EXTS.has(ext) || TEXT_EXTS.has(fileName.toLowerCase());
