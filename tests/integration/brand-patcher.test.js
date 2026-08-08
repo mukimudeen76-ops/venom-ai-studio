@@ -43,10 +43,20 @@ describe("Brand Patcher DOM Sanitizer", () => {
     document.body.appendChild(otpModal);
 
     // Allow MutationObserver microtask to fire
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 20));
 
     expect(otpModal.querySelector("h2").textContent).toBe("Verify your Nexo AI Account");
     expect(otpModal.querySelector("p").textContent).toBe("A 6-digit code has been dispatched by Nexo AI.");
     expect(otpModal.querySelector("input").getAttribute("placeholder")).toBe("Nexo AI OTP");
+  });
+
+  it("intercepts and rewrites router-driven document.title modifications", () => {
+    initBrandPatcher();
+
+    document.title = "DeepSeek - Verification Code Sent";
+    expect(document.title).toBe("Nexo AI - Verification Code Sent");
+
+    document.title = "Log in to DeepSeek AI";
+    expect(document.title).toBe("Log in to Nexo AI");
   });
 });

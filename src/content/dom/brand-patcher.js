@@ -1,56 +1,81 @@
 /**
- * Nexo AI - Universal Brand Patcher & DOM Sanitizer
+ * Nexo AI - Universal Brand Patcher & Absolute Brand Sanitizer
  * 
- * Completely sanitizes and replaces any occurrence of legacy brands (DeepSeek, etc.)
- * across the entire DOM lifecycle, including:
- * - Login pages, headers, titles, and dialogs
- * - Email verification code (OTP) modals and input placeholders
- * - Password and email input helper texts
- * - Dynamic attribute and text mutations (characterData + subtree)
+ * Thoroughly and permanently eliminates every occurrence of "DeepSeek" / "BetterDeepSeek"
+ * across the entire DOM, including:
+ * - Login pages, authentication dialogs, and registration modals
+ * - Gmail / Email OTP verification code inputs, placeholders, and descriptions
+ * - Page titles, document headers, navigation bars, and footers
+ * - Live dynamic DOM updates, characterData mutations, input attributes, and popups
  */
 
 const TARGET_BRAND = "Nexo AI";
-const BRAND_REGEX = /deepseek(?:\.com|\s*ai)?/gi;
+const BRAND_REGEX = /(?:better\s*)?deep\s*seek(?:\.com|\s*ai)?/gi;
 
 export function initBrandPatcher() {
-  if (typeof document === 'undefined') return;
+  if (typeof document === "undefined") return;
 
   function sanitizeText(str) {
-    if (!str || typeof str !== 'string') return str;
-    if (!/deepseek/i.test(str)) return str;
+    if (!str || typeof str !== "string") return str;
+    if (!/deep\s*seek/i.test(str)) return str;
     return str.replace(BRAND_REGEX, TARGET_BRAND);
   }
+
+  // 1. Permanent document.title proxy so no router can set "DeepSeek" title
+  try {
+    let currentTitle = sanitizeText(document.title) || TARGET_BRAND;
+    if (document.title && /deep\s*seek/i.test(document.title)) {
+      document.title = currentTitle;
+    }
+    const originalTitleDesc = Object.getOwnPropertyDescriptor(Document.prototype, "title") ||
+      Object.getOwnPropertyDescriptor(HTMLDocument.prototype, "title");
+
+    if (originalTitleDesc && originalTitleDesc.configurable) {
+      Object.defineProperty(document, "title", {
+        get() {
+          return sanitizeText(originalTitleDesc.get.call(document)) || TARGET_BRAND;
+        },
+        set(val) {
+          originalTitleDesc.set.call(document, sanitizeText(val) || TARGET_BRAND);
+        },
+        configurable: true,
+      });
+    }
+  } catch (e) {}
 
   function patchNode(node) {
     if (!node) return;
 
+    // Text node sanitization
     if (node.nodeType === Node.TEXT_NODE) {
-      if (node.nodeValue && /deepseek/i.test(node.nodeValue)) {
+      if (node.nodeValue && /deep\s*seek/i.test(node.nodeValue)) {
         node.nodeValue = sanitizeText(node.nodeValue);
       }
       return;
     }
 
+    // Element node sanitization
     if (node.nodeType === Node.ELEMENT_NODE) {
-      // Input placeholders and titles
-      if (node.placeholder && /deepseek/i.test(node.placeholder)) {
+      // Input placeholders, values, and titles
+      if (node.placeholder && /deep\s*seek/i.test(node.placeholder)) {
         node.placeholder = sanitizeText(node.placeholder);
       }
-      if (node.title && /deepseek/i.test(node.title)) {
+      if (node.title && /deep\s*seek/i.test(node.title)) {
         node.title = sanitizeText(node.title);
       }
+      if (node.value && typeof node.value === "string" && /deep\s*seek/i.test(node.value) && (node.tagName === "BUTTON" || node.type === "button" || node.type === "submit")) {
+        node.value = sanitizeText(node.value);
+      }
+
+      // Attributes sanitization
       if (node.getAttribute) {
-        if (node.getAttribute('aria-label') && /deepseek/i.test(node.getAttribute('aria-label'))) {
-          node.setAttribute('aria-label', sanitizeText(node.getAttribute('aria-label')));
-        }
-        if (node.getAttribute('placeholder') && /deepseek/i.test(node.getAttribute('placeholder'))) {
-          node.setAttribute('placeholder', sanitizeText(node.getAttribute('placeholder')));
-        }
-        if (node.getAttribute('aria-placeholder') && /deepseek/i.test(node.getAttribute('aria-placeholder'))) {
-          node.setAttribute('aria-placeholder', sanitizeText(node.getAttribute('aria-placeholder')));
-        }
-        if (node.getAttribute('alt') && /deepseek/i.test(node.getAttribute('alt'))) {
-          node.setAttribute('alt', sanitizeText(node.getAttribute('alt')));
+        const checkAttrs = ["aria-label", "placeholder", "aria-placeholder", "data-placeholder", "alt", "title", "data-tip"];
+        for (let a = 0; a < checkAttrs.length; a++) {
+          const attrName = checkAttrs[a];
+          const val = node.getAttribute(attrName);
+          if (val && /deep\s*seek/i.test(val)) {
+            node.setAttribute(attrName, sanitizeText(val));
+          }
         }
       }
 
@@ -60,11 +85,16 @@ export function initBrandPatcher() {
         patchNode(child);
         child = child.nextSibling;
       }
+
+      // Shadow root inspection if present
+      if (node.shadowRoot) {
+        patchNode(node.shadowRoot);
+      }
     }
   }
 
   function runPatch() {
-    if (document.title && /deepseek/i.test(document.title)) {
+    if (document.title && /deep\s*seek/i.test(document.title)) {
       document.title = sanitizeText(document.title);
     }
     if (document.documentElement) {
@@ -75,23 +105,23 @@ export function initBrandPatcher() {
   // Initial immediate patch
   runPatch();
 
-  // Continuous MutationObserver capturing all child additions, attribute changes, and characterData updates
+  // 2. High-performance Continuous MutationObserver for real-time OTP modals & dynamic forms
   const observer = new MutationObserver((mutations) => {
     for (let i = 0; i < mutations.length; i++) {
       const mutation = mutations[i];
-      if (mutation.type === 'childList') {
+      if (mutation.type === "childList") {
         for (let j = 0; j < mutation.addedNodes.length; j++) {
           patchNode(mutation.addedNodes[j]);
         }
-      } else if (mutation.type === 'characterData') {
-        if (mutation.target && mutation.target.nodeValue && /deepseek/i.test(mutation.target.nodeValue)) {
+      } else if (mutation.type === "characterData") {
+        if (mutation.target && mutation.target.nodeValue && /deep\s*seek/i.test(mutation.target.nodeValue)) {
           mutation.target.nodeValue = sanitizeText(mutation.target.nodeValue);
         }
-      } else if (mutation.type === 'attributes') {
+      } else if (mutation.type === "attributes") {
         patchNode(mutation.target);
       }
     }
-    if (document.title && /deepseek/i.test(document.title)) {
+    if (document.title && /deep\s*seek/i.test(document.title)) {
       document.title = sanitizeText(document.title);
     }
   });
@@ -102,12 +132,16 @@ export function initBrandPatcher() {
       subtree: true,
       characterData: true,
       attributes: true,
-      attributeFilter: ['placeholder', 'title', 'aria-label', 'alt', 'aria-placeholder'],
+      attributeFilter: ["placeholder", "title", "aria-label", "alt", "aria-placeholder", "data-placeholder"],
     });
   }
 
-  // Also hook DOMContentLoaded and load events for delayed login scripts
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', runPatch, { once: true });
+  // 3. Periodic sweep interval for dynamic SPA frame transitions
+  if (typeof window !== "undefined") {
+    setInterval(runPatch, 350);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", runPatch, { once: true });
   }
 }
