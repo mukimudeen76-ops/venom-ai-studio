@@ -60,7 +60,7 @@ describe("App toggle button", () => {
 
     const toggle = target.querySelector("#bds-toggle");
     expect(toggle).not.toBeNull();
-    expect(toggle.getAttribute("aria-label")).toBe("Better DeepSeek");
+    expect(toggle.getAttribute("aria-label")).toBe("Venom AI Studio");
 
     cleanup();
   });

@@ -22,7 +22,7 @@ const colors = {
 };
 
 function main() {
-  console.log(`${colors.bold}${colors.cyan}🔍 Better DeepSeek Locale Verification Tool${colors.reset}\n`);
+  console.log(`${colors.bold}${colors.cyan}🔍 Venom AI Studio Locale Verification Tool${colors.reset}\n`);
 
   if (!fs.existsSync(BASE_FILE_PATH)) {
     console.error(`${colors.red}Error: Base locale file 'en.json' not found at ${BASE_FILE_PATH}${colors.reset}`);

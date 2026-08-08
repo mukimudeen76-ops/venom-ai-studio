@@ -15,8 +15,10 @@
   import { encryptData, decryptData } from "../../lib/utils/crypto.js";
   import { makeId } from "../../lib/utils/helpers.js";
   import SnippetList from "./SnippetList.svelte";
+  import { voiceEngine, VOICE_PRESETS } from "../../lib/voice-engine.js";
 
   let { onapiplayground, onimportdata, onsave } = $props();
+  let selectedVoicePreset = $state("venom-female-nova");
 
   let customSystemPrompts = $state(appState.settings.customSystemPrompts || []);
   let activeSystemPromptId = $state(appState.settings.activeSystemPromptId || "default");
@@ -1825,6 +1827,24 @@
         </div>
 
         <div class="bds-toggle-row">
+          <span class="bds-toggle-label">Voice Model & Persona</span>
+          <select class="bds-select" bind:value={selectedVoicePreset} onchange={() => voiceEngine.setVoice(selectedVoicePreset)}>
+            {#each VOICE_PRESETS as preset}
+              <option value={preset.id}>{preset.name} - ({preset.gender})</option>
+            {/each}
+          </select>
+        </div>
+
+        <div class="bds-toggle-row" style="margin-top: 4px;">
+          <span class="bds-toggle-label" style="font-size: 11px; opacity: 0.8;">Test Voice Output</span>
+          <button type="button" class="bds-btn" style="padding: 4px 10px; font-size: 11px;" onclick={() => {
+            voiceEngine.speak("Hello! Venom AI Studio is online and ready.", selectedVoicePreset);
+          }}>
+            🔊 Play Voice Sample
+          </button>
+        </div>
+
+        <div class="bds-toggle-row">
           <span class="bds-toggle-label">{t('settings.speechLanguage')}</span>
           <select class="bds-select" bind:value={voiceLanguage}>
             <option value="en-US">English (US)</option>
@@ -1850,6 +1870,19 @@
       </div>
     </div>
     {/if}
+
+    <!-- Developer & Creator Credits Card -->
+    <div style="background: var(--bds-bg-panel); border: 1px solid var(--bds-border); border-radius: 8px; padding: 14px; margin-top: 16px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--bds-accent); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+        👨‍💻 Developer & Creator Credits
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--bds-text-primary);">
+        <div>Lead Developer: <b style="color: var(--bds-accent);">Tehzeeb</b></div>
+        <div>Instagram: <a href="https://instagram.com/xtehzeeb.x" target="_blank" rel="noopener noreferrer" style="color: var(--bds-accent); text-decoration: none; font-weight: 500;">@xtehzeeb.x</a></div>
+        <div>Official Support: <a href="mailto:xtehzeeb.x7@gmail.com" style="color: var(--bds-text-secondary); text-decoration: none;">xtehzeeb.x7@gmail.com</a></div>
+        <div>Repository: <a href="https://github.com/mukimudeen76-ops/venom-ai-studio" target="_blank" rel="noopener noreferrer" style="color: var(--bds-accent); text-decoration: none;">mukimudeen76-ops/venom-ai-studio</a></div>
+      </div>
+    </div>
 
     {#if isSectionMatch('subIntegrations')}
     <button type="button" class="bds-sub-toggle" class:open={subIntegrationsOpen} onclick={() => subIntegrationsOpen = !subIntegrationsOpen} aria-expanded={subIntegrationsOpen}>
