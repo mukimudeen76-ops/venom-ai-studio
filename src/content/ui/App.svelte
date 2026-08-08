@@ -10,6 +10,7 @@
   import PreviewPanel from "./PreviewPanel.svelte";
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import ApiPlayground from "../api-playground/ApiPlayground.svelte";
+  import LiveVoiceOverlay from "./LiveVoiceOverlay.svelte";
   import appState from "../state.js";
 
   let drawerOpen = $state(false);
@@ -166,3 +167,5 @@
   onconfirm={() => handleConfirm(true)}
   oncancel={() => handleConfirm(false)}
 />
+
+<LiveVoiceOverlay />
