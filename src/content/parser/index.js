@@ -133,6 +133,8 @@ export function parseBdsMessage(rawText, isSettled = false) {
       youtubeFetch: [],
       searchQueries: [],
       mcpCalls: [],
+      terminalCommands: [],
+      gitPushes: [],
     },
     visibleText: text,
   };
@@ -371,6 +373,24 @@ export function parseBdsMessage(rawText, isSettled = false) {
     let argsObj = {};
     try { argsObj = JSON.parse(rawArgs); } catch { argsObj = { _raw: rawArgs.trim() }; }
     result.autoRequests.mcpCalls.push({ serverUrl, toolName, args: argsObj });
+  }
+
+  const autoTerminalRegex = /<BDS:AUTO:TERMINAL(?:\s+([^>]*))?>([\s\S]*?)<\/BDS:AUTO:TERMINAL>/gi;
+  while ((match = autoTerminalRegex.exec(text)) !== null) {
+    if (isInsideCodeBlock(match.index)) continue;
+    const attrs = parseTagAttributes(match[1] || "");
+    const command = (attrs.command || match[2] || "").trim();
+    if (command) {
+      result.autoRequests.terminalCommands.push({ command, cwd: attrs.cwd || "" });
+    }
+  }
+
+  const autoGitPushRegex = /<BDS:AUTO:GIT_PUSH(?:\s+([^>]*))?>([\s\S]*?)<\/BDS:AUTO:GIT_PUSH>/gi;
+  while ((match = autoGitPushRegex.exec(text)) !== null) {
+    if (isInsideCodeBlock(match.index)) continue;
+    const attrs = parseTagAttributes(match[1] || "");
+    const message = (attrs.message || match[2] || "").trim();
+    result.autoRequests.gitPushes.push({ message, token: attrs.token || "" });
   }
 
   const selfClosingCreateRegex = /<BDS:create_file\s+([^>]*)\/>/gi;

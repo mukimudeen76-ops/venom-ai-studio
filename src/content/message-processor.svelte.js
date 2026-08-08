@@ -31,7 +31,7 @@ import {
   removeAllMessageHosts,
   removeMessageHost,
 } from "./dom/host.js";
-import { handleAutoWebFetch, handleAutoGitHubFetch, handleAutoTwitterFetch, handleAutoYouTubeFetch, handleAutoSearch, handleAutoSearchForRun, handleAutoMcpCall } from "./auto.js";
+import { handleAutoWebFetch, handleAutoGitHubFetch, handleAutoTwitterFetch, handleAutoYouTubeFetch, handleAutoSearch, handleAutoSearchForRun, handleAutoMcpCall, handleAutoTerminalCommand, handleAutoGitPush } from "./auto.js";
 import { handleManagedAutoContinuation, isManagedRunActive, trySynthesizeReport } from "./deep-research.js";
 
 import { mount, unmount } from "svelte";
@@ -553,6 +553,27 @@ export function processMessageNode(node, nodeIndex = -1, nodes = null, context =
         if (!stateData.autoMcpCallsHandled.has(mcpKey)) {
           stateData.autoMcpCallsHandled.add(mcpKey);
           handleAutoMcpCall(mcp.serverUrl, mcp.toolName, mcp.args);
+        }
+      }
+
+      if (parsed.autoRequests.terminalCommands) {
+        if (!stateData.autoTerminalHandled) stateData.autoTerminalHandled = new Set();
+        for (const item of parsed.autoRequests.terminalCommands) {
+          if (!stateData.autoTerminalHandled.has(item.command)) {
+            stateData.autoTerminalHandled.add(item.command);
+            handleAutoTerminalCommand(item.command, item.cwd);
+          }
+        }
+      }
+
+      if (parsed.autoRequests.gitPushes) {
+        if (!stateData.autoGitPushesHandled) stateData.autoGitPushesHandled = new Set();
+        for (const item of parsed.autoRequests.gitPushes) {
+          const pushKey = `${item.message}|${item.token}`;
+          if (!stateData.autoGitPushesHandled.has(pushKey)) {
+            stateData.autoGitPushesHandled.add(pushKey);
+            handleAutoGitPush(item.message, item.token);
+          }
         }
       }
 
