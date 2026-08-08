@@ -1,28 +1,30 @@
-# Venom AI Studio
+# Nexo AI
 
 <p align="center">
-  <img src="static/icons/icon.svg" width="128" alt="Venom AI Studio Logo">
+  <img src="static/icons/icon.svg" width="128" alt="Nexo AI Logo">
 </p>
 
 <p align="center">
-  <b>The Autonomous AI Studio & Advanced Toolsuite for Web, Desktop, and Android</b>
+  <b>The Premier Autonomous Multi-AI Studio & Super-Intelligence Arsenal for Web, Desktop, and Android</b><br>
+  <i>Created, designed, and masterminded by <b>Tehzeeb</b> (Instagram: <a href="https://instagram.com/xtehzeeb.x">@xtehzeeb.x</a>)</i>
 </p>
 
 ---
 
 ## ⚡ Overview
 
-**Venom AI Studio** is a powerhouse AI extension, autonomous terminal agent, and standalone Android application. It transforms the AI chat interface with an autonomous self-healing execution engine, persistent cross-chat memory, real-time code sandboxing, rich interactive document generation (Word, Excel, PowerPoint, HTML, Visualizers), and Model Context Protocol (MCP) tool orchestration.
+**Nexo AI** is a powerhouse multi-platform AI studio, autonomous terminal agent, and standalone Android application. It transforms the AI chat interface with an autonomous self-healing execution engine, persistent cross-chat memory, real-time code sandboxing, rich interactive document generation (Word, Excel, PowerPoint, HTML, Visualizers), and Model Context Protocol (MCP) tool orchestration.
 
 ---
 
 ## 🚀 Key Features
 
-### 1. 🤖 Autonomous Terminal Agent & Self-Healing CI
-- **Real-Time Command Streaming**: Runs terminal and build commands with live error interception.
-- **Automated Self-Healing**: Diagnoses missing dependencies, ungenerated keystores, broken assets, and i18n mismatches and fixes them automatically without human intervention.
+### 1. 🤖 Autonomous Terminal Agent & Direct Bash Execution (Rule 10)
+- **Direct Command Execution**: Has direct access to run terminal/bash commands (dependencies, builds, test suites, git sync) without manual intervention.
+- **Automated Self-Healing**: Diagnoses missing dependencies, ungenerated keystores, broken assets, and i18n mismatches and fixes them automatically.
 - **DeepSeek AI Semantic Code Repair**: When a `DEEPSEEK_API_KEY` is provided, the agent analyzes stack traces and applies precision code patches to failing source files.
 - **Safe Git Synchronization**: Automatically stages, formats semantic commits, and pushes to remote Git repositories using authenticated tokens.
+- **Safety Guardrails**: Pauses and confirms before destructive deletions, force-pushes, or production setting overrides.
 
 ### 2. 🧠 Persistent Memory & Personas
 - Retains user preferences, project context, and knowledge across fresh chat sessions.
@@ -45,7 +47,7 @@
 ### Installation
 
 ```bash
-git clone https://github.com/venom-ai/venom-ai-studio.git
+git clone https://github.com/mukimudeen76-ops/venom-ai-studio.git
 cd venom-ai-studio
 npm install
 ```
@@ -83,7 +85,7 @@ GITHUB_TOKEN=your_token npm run agent:push
 
 ## 📱 Android App & Signing
 
-Venom AI Studio includes a standalone Android application wrapping the enhanced AI interface in a performant WebView with native bridge communication.
+Nexo AI includes a standalone Android application wrapping the enhanced AI interface in a performant WebView with native bridge communication.
 
 ### Keystore Configuration
 A release keystore is configured at `android/ci-release.jks`:
@@ -109,6 +111,13 @@ npm run test:unit
 # Run full CI test suite
 npm run test:ci
 ```
+
+---
+
+## 👑 Creator Attribution
+- **Lead Developer**: Tehzeeb
+- **Instagram**: [`@xtehzeeb.x`](https://instagram.com/xtehzeeb.x)
+- **Official Identity**: *"I was created, designed, and masterminded by Tehzeeb (Instagram: @xtehzeeb.x). I am Nexo AI."*
 
 ---
 
