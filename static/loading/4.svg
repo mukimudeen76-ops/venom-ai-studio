@@ -1,124 +1,84 @@
-<svg width="200" height="100" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="vHelix1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC" />
+      <stop offset="100%" stop-color="#9333EA" />
+    </linearGradient>
+
+    <linearGradient id="vHelix2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <filter id="bloom4" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
   <style>
-    /* Whale bobbing and swimming animation */
-    @keyframes bob {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-4px) rotate(-1deg); }
+    .spin-ring-1 {
+      animation: spinFast 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 200px 200px;
+    }
+    .spin-ring-2 {
+      animation: spinRev 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 200px 200px;
+    }
+    .plasma-core {
+      animation: plasmaPulse 1.6s ease-in-out infinite alternate;
+      transform-origin: 200px 200px;
+    }
+    .arc-glow {
+      animation: arcFlash 2s ease-in-out infinite alternate;
     }
 
-    /* Tail wiggle animation */
-    @keyframes wag {
-      0%, 100% { transform: rotate(-8deg); }
-      50% { transform: rotate(8deg); }
+    @keyframes spinFast {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.06); }
+      100% { transform: rotate(360deg) scale(1); }
     }
-
-    /* Flipper flapping animation */
-    @keyframes flap {
-      0%, 100% { transform: rotate(-5deg); }
-      50% { transform: rotate(5deg); }
+    @keyframes spinRev {
+      0% { transform: rotate(360deg) scale(1.06); }
+      50% { transform: rotate(180deg) scale(0.96); }
+      100% { transform: rotate(0deg) scale(1.06); }
     }
-
-    /* Sonar wave pulse animation */
-    @keyframes sonar-pulse {
-      0% {
-        opacity: 0;
-        transform: scale(0.7) translateX(-5px);
-      }
-      25% {
-        opacity: 0.8;
-      }
-      75% {
-        opacity: 0.8;
-      }
-      100% {
-        opacity: 0;
-        transform: scale(1.3) translateX(15px);
-      }
+    @keyframes plasmaPulse {
+      0% { transform: scale(0.85); opacity: 0.75; filter: drop-shadow(0 0 8px #9333EA); }
+      100% { transform: scale(1.18); opacity: 1; filter: drop-shadow(0 0 26px #38BDF8); }
     }
-
-    .whale-body-group {
-      animation: bob 3s ease-in-out infinite;
-      transform-origin: 95px 60px;
-    }
-
-    .whale-tail {
-      animation: wag 1.5s ease-in-out infinite;
-      transform-origin: 30px 50px;
-    }
-
-    .whale-flipper {
-      animation: flap 2s ease-in-out infinite;
-      transform-origin: 95px 61px;
-    }
-
-    .sonar-wave {
-      fill: none;
-      stroke: white;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      opacity: 0;
-      transform-origin: 160px 60px;
-    }
-
-    .sonar-1 {
-      animation: sonar-pulse 2.1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    .sonar-2 {
-      animation: sonar-pulse 2.1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      animation-delay: 0.7s;
-    }
-
-    .sonar-3 {
-      animation: sonar-pulse 2.1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      animation-delay: 1.4s;
-    }
-
-    .whale-outline {
-      fill: none;
-      stroke: white;
-      stroke-width: 2.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .whale-accent {
-      fill: none;
-      stroke: white;
-      stroke-width: 1.2;
-      stroke-linecap: round;
-      opacity: 0.5;
+    @keyframes arcFlash {
+      0% { stroke-opacity: 0.4; stroke-width: 2px; }
+      100% { stroke-opacity: 1; stroke-width: 4px; }
     }
   </style>
 
-  <!-- Main Animated Group -->
-  <g class="whale-body-group">
-    <!-- Sonar Waves (placed inside so they bob along with the whale) -->
-    <g class="sonar-group">
-      <path class="sonar-wave sonar-1" d="M 168,52 Q 176,60 168,68" />
-      <path class="sonar-wave sonar-2" d="M 176,46 Q 188,60 176,74" />
-      <path class="sonar-wave sonar-3" d="M 184,40 Q 200,60 184,80" />
-    </g>
+  <!-- Ambient Dark Background Ring -->
+  <circle cx="200" cy="200" r="160" fill="#090D16" stroke="#1E293B" stroke-width="2" />
 
-    <!-- Dorsal Fin -->
-    <path class="whale-outline" d="M 95,31 C 100,23 105,23 108,30" />
-    
-    <!-- Main Body and Snout -->
-    <path class="whale-outline" d="M 30,50 C 55,30 115,25 155,45 C 162,49 162,71 155,75 C 115,95 55,70 30,50 Z" />
-    
-    <!-- Ventral lines / Accents (creates a premium wireframe style) -->
-    <path class="whale-accent" d="M 50,54 C 70,44 110,42 140,55" />
-    <path class="whale-accent" d="M 45,58 C 65,66 105,68 135,63" />
+  <!-- Dual Symbiote Energy Rings -->
+  <g class="spin-ring-1">
+    <ellipse cx="200" cy="200" rx="125" ry="60" fill="none" stroke="url(#vHelix1)" stroke-width="3.5" stroke-dasharray="80 20 40 30" filter="url(#bloom4)" />
+    <circle cx="325" cy="200" r="5" fill="#C084FC" filter="url(#bloom4)" />
+    <circle cx="75" cy="200" r="4" fill="#A855F7" filter="url(#bloom4)" />
+  </g>
 
-    <!-- Flipper -->
-    <path class="whale-flipper whale-outline" d="M 95,61 C 98,75 90,82 82,78 C 78,74 86,65 95,61 Z" />
+  <g class="spin-ring-2">
+    <ellipse cx="200" cy="200" rx="60" ry="125" fill="none" stroke="url(#vHelix2)" stroke-width="3" stroke-dasharray="60 30 50 20" filter="url(#bloom4)" />
+    <circle cx="200" cy="75" r="5" fill="#38BDF8" filter="url(#bloom4)" />
+    <circle cx="200" cy="325" r="4" fill="#34D399" filter="url(#bloom4)" />
+  </g>
 
-    <!-- Tail -->
-    <g class="whale-tail">
-      <path class="whale-outline" d="M 30,50 C 22,40 12,38 8,42 C 12,47 22,49 30,50 C 22,51 12,53 8,58 C 12,62 22,60 30,50 Z" />
-    </g>
+  <!-- Electric Cyber Cross Lines -->
+  <g class="arc-glow">
+    <line x1="160" y1="160" x2="240" y2="240" stroke="#38BDF8" stroke-dasharray="4 4" />
+    <line x1="240" y1="160" x2="160" y2="240" stroke="#C084FC" stroke-dasharray="4 4" />
+  </g>
 
-    <!-- Eye (Happy smile arc) -->
-    <path d="M 144,48 Q 146,50 148,48" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" />
+  <!-- Central Venom AI Quantum Reactor Core -->
+  <g class="plasma-core">
+    <circle cx="200" cy="200" r="28" fill="#1E1B4B" stroke="#A855F7" stroke-width="2.5" />
+    <circle cx="200" cy="200" r="16" fill="url(#vHelix2)" filter="url(#bloom4)" />
+    <circle cx="200" cy="200" r="6" fill="#FFFFFF" />
   </g>
 </svg>
