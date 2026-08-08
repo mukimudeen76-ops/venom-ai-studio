@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * Better DeepSeek - Autonomous Terminal Agent & Self-Healing CI Runner
+ * Venom AI Studio - Autonomous Terminal Agent & Interactive GitHub Pusher
  * 
  * Features:
  * - Executes bash / terminal commands with real-time streaming and monitoring
  * - Continuously watches for errors in builds, tests, locales, and android gradle
  * - Automatically diagnoses and auto-fixes issues (Keystores, missing modules, i18n, assets)
  * - Optional DeepSeek AI repair engine for complex code fixes via DEEPSEEK_API_KEY
- * - Safe Git auto-commit & authenticated push to GitHub with token masking
+ * - Interactive & automated Git commit & authenticated push to GitHub with token masking
  * - Watch mode for continuous background development & instant auto-repair
  */
 
@@ -16,6 +16,7 @@ import { spawn, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
+import readline from 'readline';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -45,8 +46,23 @@ const log = {
   warn: (msg) => console.log(`${colors.yellow}⚠ [Agent]${colors.reset} ${msg}`),
   error: (msg) => console.log(`${colors.red}✖ [Agent]${colors.reset} ${colors.bold}${msg}${colors.reset}`),
   step: (step, total, msg) => console.log(`\n${colors.bold}${colors.blue}▶ [Step ${step}/${total}]${colors.reset} ${colors.bold}${msg}${colors.reset}`),
-  header: (title) => console.log(`\n${colors.bold}${colors.magenta}═════════════════════════════════════════════════════════════════════════\n  🤖 Better DeepSeek - Autonomous Terminal Agent: ${title}\n═════════════════════════════════════════════════════════════════════════${colors.reset}\n`),
+  header: (title) => console.log(`\n${colors.bold}${colors.magenta}═════════════════════════════════════════════════════════════════════════\n  🤖 Venom AI Studio - Autonomous Terminal Agent: ${title}\n═════════════════════════════════════════════════════════════════════════${colors.reset}\n`),
 };
+
+// Ask questions interactively in terminal
+function askQuestion(query) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) => {
+    rl.question(query, (ans) => {
+      rl.close();
+      resolve(ans.trim());
+    });
+  });
+}
 
 // Parse command line arguments
 function parseArgs() {
@@ -56,6 +72,8 @@ function parseArgs() {
     watch: false,
     autoFix: true,
     push: false,
+    interactivePush: false,
+    message: null,
     token: process.env.GITHUB_TOKEN || process.env.GH_TOKEN || null,
     deepseekKey: process.env.DEEPSEEK_API_KEY || null,
     maxRetries: 5,
@@ -72,6 +90,11 @@ function parseArgs() {
       options.autoFix = false;
     } else if (arg === '--push' || arg === '-p') {
       options.push = true;
+    } else if (arg === '--interactive' || arg === '-i') {
+      options.interactivePush = true;
+      options.push = true;
+    } else if (arg === '--message' || arg === '-m') {
+      options.message = args[++i];
     } else if (arg === '--token' || arg === '-t') {
       options.token = args[++i];
     } else if (arg === '--deepseek-key' || arg === '-k') {
@@ -86,27 +109,33 @@ function parseArgs() {
     }
   }
 
+  // If push command was invoked directly, default to interactive if terminal is open and no token provided
+  if (options.push && !options.token && process.stdin.isTTY) {
+    options.interactivePush = true;
+  }
+
   return options;
 }
 
 function printHelp() {
   console.log(`
-${colors.bold}Better DeepSeek Autonomous Terminal Agent${colors.reset}
+${colors.bold}Venom AI Studio - Autonomous Terminal Agent${colors.reset}
 
 Usage:
   node scripts/terminal-agent.js [options]
-  npm run agent
-  npm run agent:watch
-  npm run agent:fix
+  npm run push            (Interactively verifies, auto-fixes all errors & pushes to GitHub)
+  npm run agent:fix       (Full self-healing test & build pipeline)
+  npm run agent:watch     (Continuous background watcher with auto-healing)
 
 Options:
-  --exec, -e <cmd>        Execute a specific bash/terminal command with auto-healing
+  --push, -p              Verify 0 errors, auto-fix failures, commit & push to GitHub
+  --interactive, -i       Interactively prompt for GitHub Token, Commit Message & Remote
+  --message, -m <msg>     Custom Git commit message
+  --token, -t <token>     GitHub Personal Access Token (or set GITHUB_TOKEN)
+  --exec, -e <cmd>        Execute any terminal/bash command with auto-healing & monitoring
   --watch, -w             Watch mode: monitor files, run checks, and auto-fix errors on save
-  --pipeline <name>       Run preset pipeline: 'full' (default), 'quick', 'web', 'android'
-  --no-fix                Disable auto-fixing (only report errors)
-  --push, -p              Commit and push changes to GitHub once all errors are resolved
-  --token, -t <token>     GitHub Personal Access Token (can also use GITHUB_TOKEN env var)
-  --deepseek-key, -k <key>DeepSeek API Key for AI code repair (can use DEEPSEEK_API_KEY env var)
+  --pipeline <name>       Preset pipeline: 'full' (default), 'quick', 'web', 'android'
+  --deepseek-key, -k <key>DeepSeek API Key for AI code repair (or set DEEPSEEK_API_KEY)
   --retries, -r <n>       Max auto-fix retry iterations per error (default: 5)
   --help, -h              Show this help message
 `);
@@ -189,7 +218,7 @@ async function applyRuleBasedFix(errorResult) {
       try {
         fs.mkdirSync(path.join(ROOT_DIR, 'android'), { recursive: true });
         execSync(
-          `/usr/lib/jvm/jdk-11/bin/keytool -genkeypair -v -keystore "${keystorePath}" -alias release -keyalg RSA -keysize 2048 -validity 10000 -storepass android -keypass android -dname "CN=better-deepseek, OU=Mobile, O=EdgeTypE, L=City, ST=State, C=US"`,
+          `/usr/lib/jvm/jdk-11/bin/keytool -genkeypair -v -keystore "${keystorePath}" -alias release -keyalg RSA -keysize 2048 -validity 10000 -storepass android -keypass android -dname "CN=venom-ai-studio, OU=Mobile, O=VenomAI, L=City, ST=State, C=US"`,
           { stdio: 'pipe' }
         );
         fixesApplied.push(`Generated Java Keystore 'android/ci-release.jks' (RSA 2048, validity 10000 days).`);
@@ -314,7 +343,7 @@ async function applyDeepSeekAIFix(errorResult, apiKey) {
     }
   }
 
-  const prompt = `You are an automated software repair agent for the project 'Better DeepSeek'.
+  const prompt = `You are an automated software repair agent for 'Venom AI Studio'.
 The terminal command '${errorResult.command}' failed with the following output:
 
 --- TERMINAL ERROR TRACE ---
@@ -447,60 +476,77 @@ async function runTaskWithAutoHealing(command, options) {
 }
 
 /**
- * Git Auto-Commit and Push to GitHub
+ * Git Auto-Commit and Push to GitHub (with Interactive Prompts)
  */
 async function handleGitPush(options) {
-  log.header(`Git Repository Synchronization & Push`);
+  log.header(`GitHub Repository Synchronization & Push`);
 
   try {
-    // 1. Check if git status has changes
-    const statusOutput = execSync('git status --porcelain', { cwd: ROOT_DIR }).toString().trim();
-    if (!statusOutput) {
-      log.info(`Git working tree is clean. Nothing to commit.`);
-    } else {
-      log.info(`Changes detected in working tree:\n${colors.gray}${statusOutput}${colors.reset}`);
+    let token = options.token;
+    let customMsg = options.message;
 
-      // Add all changes
-      log.info(`Staging files with 'git add .' ...`);
-      execSync('git add .', { cwd: ROOT_DIR, stdio: 'inherit' });
-
-      // Create descriptive commit message
-      const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
-      const commitMsg = `chore(agent): automated self-healing build & fixes [${timestamp}]`;
+    // If interactive push requested
+    if (options.interactivePush && process.stdin.isTTY) {
+      console.log(`${colors.cyan}--- GitHub Authentication & Push Settings ---${colors.reset}`);
       
-      log.info(`Committing with message: "${commitMsg}" ...`);
-      execSync(`git commit -m "${commitMsg}"`, { cwd: ROOT_DIR, stdio: 'inherit' });
-      log.success(`Committed successfully!`);
-    }
+      if (!token) {
+        token = await askQuestion(`${colors.yellow}Enter GitHub Personal Access Token (press Enter to use current git credentials): ${colors.reset}`);
+      }
 
-    if (options.push) {
-      log.info(`Pushing to remote GitHub repository...`);
-
-      // Determine remote and token handling
-      let remoteUrl = execSync('git remote get-url origin', { cwd: ROOT_DIR }).toString().trim();
-
-      if (options.token) {
-        // Authenticate using provided token securely without logging plaintext token
-        const match = remoteUrl.match(/github\.com[/:]([\w\-]+)\/([\w\-]+)(?:\.git)?/i);
-        if (match) {
-          const owner = match[1];
-          const repo = match[2];
-          const authenticatedUrl = `https://x-access-token:${options.token}@github.com/${owner}/${repo}.git`;
-          
-          log.info(`Pushing to https://github.com/${owner}/${repo}.git using provided token...`);
-          execSync(`git push ${authenticatedUrl} HEAD`, { cwd: ROOT_DIR, stdio: 'pipe' });
-          log.success(`Pushed changes to GitHub repository successfully!`);
-        } else {
-          execSync('git push origin HEAD', { cwd: ROOT_DIR, stdio: 'inherit' });
-          log.success(`Pushed changes to GitHub successfully!`);
-        }
-      } else {
-        execSync('git push origin HEAD', { cwd: ROOT_DIR, stdio: 'inherit' });
-        log.success(`Pushed changes to GitHub successfully!`);
+      if (!customMsg) {
+        const inputMsg = await askQuestion(`${colors.yellow}Enter Commit Message (press Enter for auto-generated timestamp): ${colors.reset}`);
+        if (inputMsg) customMsg = inputMsg;
       }
     }
+
+    // 1. Check git status
+    const statusOutput = execSync('git status --porcelain', { cwd: ROOT_DIR }).toString().trim();
+    if (!statusOutput) {
+      log.info(`Git working tree is clean. No local modifications.`);
+    } else {
+      log.info(`Staging changes with 'git add .' ...`);
+      execSync('git add .', { cwd: ROOT_DIR, stdio: 'inherit' });
+
+      // Create commit message
+      const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+      const commitMsg = customMsg || `chore(agent): automated self-healing build & fixes [${timestamp}]`;
+      
+      log.info(`Committing: "${colors.bold}${commitMsg}${colors.reset}"`);
+      execSync(`git commit -m "${commitMsg}"`, { cwd: ROOT_DIR, stdio: 'inherit' });
+      log.success(`Committed locally with 0 errors!`);
+    }
+
+    // 2. Push to remote
+    log.info(`Pushing to GitHub remote repository...`);
+    let remoteUrl = '';
+    try {
+      remoteUrl = execSync('git remote get-url origin', { cwd: ROOT_DIR }).toString().trim();
+    } catch (e) {
+      log.warn(`No git remote origin configured. If you have a repo URL, set it with 'git remote add origin <url>'`);
+      return;
+    }
+
+    if (token) {
+      // Authenticate cleanly with token without logging secrets
+      const match = remoteUrl.match(/github\.com[/:]([\w\-]+)\/([\w\-]+)(?:\.git)?/i);
+      if (match) {
+        const owner = match[1];
+        const repo = match[2];
+        const authenticatedUrl = `https://x-access-token:${token}@github.com/${owner}/${repo}.git`;
+        
+        log.info(`Authenticating & pushing to https://github.com/${owner}/${repo}.git ...`);
+        execSync(`git push ${authenticatedUrl} HEAD`, { cwd: ROOT_DIR, stdio: 'pipe' });
+        log.success(`🎉 Successfully pushed to GitHub repository!`);
+      } else {
+        execSync('git push origin HEAD', { cwd: ROOT_DIR, stdio: 'inherit' });
+        log.success(`🎉 Successfully pushed to GitHub!`);
+      }
+    } else {
+      execSync('git push origin HEAD', { cwd: ROOT_DIR, stdio: 'inherit' });
+      log.success(`🎉 Successfully pushed to GitHub!`);
+    }
   } catch (err) {
-    log.error(`Git operation encountered an issue: ${err.message}`);
+    log.error(`Git push encountered an issue: ${err.message}`);
   }
 }
 

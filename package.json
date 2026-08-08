@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "push": "node scripts/terminal-agent.js --push",
     "agent": "node scripts/terminal-agent.js",
     "agent:watch": "node scripts/terminal-agent.js --watch",
     "agent:fix": "node scripts/terminal-agent.js --pipeline full",
