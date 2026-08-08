@@ -5026,9 +5026,9 @@ tr:hover .bds-row-hide-btn:hover {
   display: none !important;
 }
 
-/* Inject Venom AI Studio logo & title */
+/* Inject Nexus Omni Studio logo & title */
 header a[href="/"]::after, nav a[href="/"]::after {
-  content: "⚡ Venom AI Studio" !important;
+  content: "⚡ Nexus Omni Studio" !important;
   font-family: system-ui, -apple-system, sans-serif !important;
   font-weight: 800 !important;
   font-size: 16px !important;

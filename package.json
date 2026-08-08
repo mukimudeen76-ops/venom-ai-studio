@@ -1,7 +1,7 @@
 {
-  "name": "venom-ai-studio",
+  "name": "nexus-omni-studio",
   "version": "1.0.0",
-  "description": "Venom AI Studio - Ultra-powerful AI studio with autonomous terminal agent, persistent memory, code execution, document generation, and DeepSeek enhancements.",
+  "description": "Nexus Omni Studio - The Premier Autonomous Multi-AI Engineering & Security Studio masterminded by Tehzeeb (@xtehzeeb.x).",
   "private": true,
   "type": "module",
   "scripts": {

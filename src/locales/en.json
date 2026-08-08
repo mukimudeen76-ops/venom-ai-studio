@@ -19,7 +19,7 @@
       "working": "Working..."
     },
     "drawer": {
-      "title": "Venom AI Studio",
+      "title": "Nexus Omni Studio",
       "close": "Close",
       "github": "GitHub",
       "version": "v{{version}}",
@@ -749,19 +749,19 @@
       }
     },
     "exporter": {
-      "branding": "Venom AI Studio",
+      "branding": "Nexus Omni Studio",
       "archiveReport": "Archive Report",
       "userQuery": "User Query",
       "aiResponse": "AI Response",
-      "pdfFooter": "Document generated via Venom AI Studio",
+      "pdfFooter": "Document generated via Nexus Omni Studio",
       "imageHeader": "Long Capture",
       "imageDate": "Captured on {{date}}",
       "userLabel": "User",
       "assistantLabel": "Assistant",
-      "imageFooter": "Generated via Venom AI Studio",
-      "htmlLogo": "Venom AI Studio Export",
+      "imageFooter": "Generated via Nexus Omni Studio",
+      "htmlLogo": "Nexus Omni Studio Export",
       "htmlToggleTheme": "Toggle Theme",
-      "htmlFooter": "Exported via Venom AI Studio",
+      "htmlFooter": "Exported via Nexus Omni Studio",
       "copy": "Copy",
       "copied": "Copied!",
       "powerpoint": "PowerPoint",
@@ -792,12 +792,12 @@
       "tokenCount": "{{count}} tok"
     },
     "whatsnew": {
-      "title": "What's New in Venom AI Studio",
+      "title": "What's New in Nexus Omni Studio",
       "versionHistory": "Version History",
       "dismiss": "Got it, thanks!",
       "reportBug": "Report Bug",
       "requestFeature": "Request Feature",
-      "brandingNote": "Venom AI Studio is an autonomous AI studio developed by Tehzeeb (Instagram: @xtehzeeb.x).",
+      "brandingNote": "Nexus Omni Studio is an autonomous multi-AI engineering studio masterminded by Tehzeeb (Instagram: @xtehzeeb.x).",
       "seeAllChanges": "See all changes in v{{version}} on GitHub",
       "seeDetailed": "See detailed release notes on GitHub",
       "features": {

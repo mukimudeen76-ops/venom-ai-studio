@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -90,7 +92,7 @@ jobs:
               -validity 10000 \
               -storepass android \
               -keypass android \
-              -dname "CN=venom-ai-studio, OU=Mobile, O=VenomAI, L=City, ST=State, C=US"
+              -dname "CN=nexus-omni-studio, OU=Mobile, O=NexusOmni, L=City, ST=State, C=US"
           else
             echo "Keystore already exists in repository."
           fi
@@ -113,64 +115,66 @@ jobs:
             exit 1
           fi
 
-      - name: Compute version and prepare artifact names
+      - name: Generate Auto Semantic Version Tag & Prepare Assets
         id: prep
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          BASE_VERSION=$(node -p "require('./package.json').version")
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          AUTO_TAG="v${BASE_VERSION}.${COMMIT_COUNT}"
+          
+          echo "version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$AUTO_TAG" >> "$GITHUB_OUTPUT"
+          echo "commit_count=$COMMIT_COUNT" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$SHORT_SHA" >> "$GITHUB_OUTPUT"
 
           APK_SRC=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
 
-          CHROME_ZIP=$(ls venom-ai-chrome.zip better-deepseek-chrome.zip 2>/dev/null | head -n 1)
-          FIREFOX_ZIP=$(ls venom-ai-firefox.zip better-deepseek-firefox.zip 2>/dev/null | head -n 1)
+          CHROME_ZIP=$(ls venom-ai-chrome.zip nexus-omni-chrome.zip 2>/dev/null | head -n 1)
+          FIREFOX_ZIP=$(ls venom-ai-firefox.zip nexus-omni-firefox.zip 2>/dev/null | head -n 1)
 
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            cp "$CHROME_ZIP" venom-ai-chrome-latest.zip
-            cp "$FIREFOX_ZIP" venom-ai-firefox-latest.zip
-            cp "$APK_SRC" venom-ai-android-latest-signed.apk
-            echo "is_tag=false" >> "$GITHUB_OUTPUT"
-          else
-            cp "$CHROME_ZIP" "venom-ai-chrome-v${VERSION}.zip"
-            cp "$FIREFOX_ZIP" "venom-ai-firefox-v${VERSION}.zip"
-            cp "$APK_SRC" "venom-ai-android-v${VERSION}-signed.apk"
-            echo "is_tag=true" >> "$GITHUB_OUTPUT"
-          fi
+          cp "$CHROME_ZIP" nexus-omni-chrome-latest.zip
+          cp "$FIREFOX_ZIP" nexus-omni-firefox-latest.zip
+          cp "$APK_SRC" nexus-omni-android-latest-signed.apk
 
-      - name: Update Latest Release
-        if: github.ref == 'refs/heads/main'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: latest
-          name: Venom AI Studio - Latest Automated Build
-          body: |
-            ## 🚀 Venom AI Studio - Latest Release
-            
-            This automated release is built directly from the `main` branch:
-            
-            - **Chrome Extension**: `venom-ai-chrome-latest.zip` (Load unpacked in `chrome://extensions`)
-            - **Firefox Extension**: `venom-ai-firefox-latest.zip`
-            - **Android App**: `venom-ai-android-latest-signed.apk` (Digitally signed APK ready for installation)
-          files: |
-            venom-ai-chrome-latest.zip
-            venom-ai-firefox-latest.zip
-            venom-ai-android-latest-signed.apk
-          prerelease: false
-          make_latest: true
+          cp "$CHROME_ZIP" "nexus-omni-chrome-${AUTO_TAG}.zip"
+          cp "$FIREFOX_ZIP" "nexus-omni-firefox-${AUTO_TAG}.zip"
+          cp "$APK_SRC" "nexus-omni-android-${AUTO_TAG}-signed.apk"
+
+      - name: Auto Tag Commit in Repository
+        run: |
+          git config user.name "Tehzeeb"
+          git config user.email "xtehzeeb.x7@gmail.com"
+          git tag -f ${{ steps.prep.outputs.tag }}
+          git push origin ${{ steps.prep.outputs.tag }} --force
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Versioned Tag Release
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Create Versioned Release with Auto Generated Notes
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.prep.outputs.tag }}
+          name: "Nexus Omni Studio ${{ steps.prep.outputs.tag }} (Build #${{ steps.prep.outputs.commit_count }})"
           body: |
-            ## 🚀 Venom AI Studio v${{ steps.prep.outputs.version }}
+            ## 🚀 Nexus Omni Studio - Release ${{ steps.prep.outputs.tag }}
             
-            Official release for version ${{ steps.prep.outputs.version }} containing signed Android APK and browser extension packages.
+            **Masterminded & Developed by Tehzeeb** (Instagram: `@xtehzeeb.x`)
+            
+            ### 📦 Downloadable Release Packages:
+            - **📱 Android App**: `nexus-omni-android-${{ steps.prep.outputs.tag }}-signed.apk` (Digitally signed APK)
+            - **🌐 Chrome Extension**: `nexus-omni-chrome-${{ steps.prep.outputs.tag }}.zip`
+            - **🦊 Firefox Add-on**: `nexus-omni-firefox-${{ steps.prep.outputs.tag }}.zip`
+            
+            ### ⚡ Built from Commit:
+            - Commit: `${{ steps.prep.outputs.short_sha }}`
           files: |
-            venom-ai-chrome-v${{ steps.prep.outputs.version }}.zip
-            venom-ai-firefox-v${{ steps.prep.outputs.version }}.zip
-            venom-ai-android-v${{ steps.prep.outputs.version }}-signed.apk
+            nexus-omni-android-${{ steps.prep.outputs.tag }}-signed.apk
+            nexus-omni-chrome-${{ steps.prep.outputs.tag }}.zip
+            nexus-omni-firefox-${{ steps.prep.outputs.tag }}.zip
+            nexus-omni-android-latest-signed.apk
+            nexus-omni-chrome-latest.zip
+            nexus-omni-firefox-latest.zip
           generate_release_notes: true
+          make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

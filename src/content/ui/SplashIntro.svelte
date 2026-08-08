@@ -47,8 +47,8 @@
         </div>
       </div>
 
-      <div class="splash-title">VENOM OMNI AI STUDIO</div>
-      <div class="splash-tagline">Autonomous Multi-AI Super Suite & Autonomous Action Engine</div>
+      <div class="splash-title">NEXUS OMNI STUDIO</div>
+      <div class="splash-tagline">Autonomous Multi-AI Super Engineering & Security Studio</div>
 
       <!-- Developer & Mastermind Badge -->
       <div class="splash-creator-badge">
