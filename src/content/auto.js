@@ -14,6 +14,7 @@ import { XLSX_SKILL } from "../lib/office-skills/xlsx.js";
 import { PPTX_SKILL } from "../lib/office-skills/pptx.js";
 import { DOCX_SKILL } from "../lib/office-skills/docx.js";
 import { extractHttpUrl, normalizeHttpUrl } from "../lib/utils/url-normalizer.js";
+import { scanAndSecureTokens } from "./token-vault.js";
 
 const TOOL_TO_SKILL = {
   PPTX: { tag: "pptx", skill: PPTX_SKILL },

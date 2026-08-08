@@ -11,6 +11,7 @@
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import ApiPlayground from "../api-playground/ApiPlayground.svelte";
   import LiveVoiceOverlay from "./LiveVoiceOverlay.svelte";
+  import SplashIntro from "./SplashIntro.svelte";
   import appState from "../state.js";
 
   let drawerOpen = $state(false);
@@ -169,3 +170,4 @@
 />
 
 <LiveVoiceOverlay />
+<SplashIntro />
