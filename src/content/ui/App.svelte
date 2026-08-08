@@ -168,6 +168,3 @@
   onconfirm={() => handleConfirm(true)}
   oncancel={() => handleConfirm(false)}
 />
-
-<LiveVoiceOverlay />
-<SplashIntro />
