@@ -23,6 +23,7 @@ import { loadStateFromStorage, bindStorageChangeListener } from "./storage.js";
 import { injectHookScript, setupBridgeEvents, pushConfigToPage } from "./bridge.js";
 import { mountUi } from "./ui/mount.js";
 import { observeChatDom, scheduleScan, startUrlWatcher } from "./scanner.js";
+import { initBrandPatcher } from "./dom/brand-patcher.js";
 import { initSidebarMenuInjector } from "./ui/SidebarMenuInjector.js";
 import { initSidebarSearch } from "./ui/SidebarSearch.js";
 import { checkPendingExport } from "./tools/pending-export.js";
@@ -84,6 +85,7 @@ async function init() {
   });
   startStatusMonitor();
   startThemeWatcher();
+  initBrandPatcher();
 
   // Keep state.remoteConfig in sync when the RemoteConfigManager updates
   window.addEventListener(REMOTE_CONFIG_EVENT, () => {

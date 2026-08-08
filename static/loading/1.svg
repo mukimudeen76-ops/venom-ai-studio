@@ -1,124 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
   <defs>
-    <!-- Background Glow -->
-    <radialGradient id="vGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#9333EA" stop-opacity="0.35" />
-      <stop offset="60%" stop-color="#06B6D4" stop-opacity="0.15" />
-      <stop offset="100%" stop-color="#090D16" stop-opacity="0" />
-    </radialGradient>
-
-    <!-- Venom Purple Neon -->
-    <linearGradient id="vPurple" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#C084FC" />
-      <stop offset="50%" stop-color="#9333EA" />
-      <stop offset="100%" stop-color="#581C87" />
+    <linearGradient id="apexGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#818CF8" />
+      <stop offset="100%" stop-color="#C084FC" />
     </linearGradient>
-
-    <!-- Venom Cyan Laser -->
-    <linearGradient id="vCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#67E8F9" />
-      <stop offset="50%" stop-color="#06B6D4" />
-      <stop offset="100%" stop-color="#0891B2" />
-    </linearGradient>
-
-    <!-- Core Emerald Spark -->
-    <linearGradient id="vEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="apexGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#34D399" />
-      <stop offset="100%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#06B6D4" />
     </linearGradient>
-
-    <filter id="neonBlur" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="6" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
   </defs>
 
   <style>
-    .ring-outer {
-      animation: spinRight 6s linear infinite;
-      transform-origin: 200px 200px;
+    .apex-spin-arc {
+      animation: spinLinear 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 100px 100px;
     }
-    .ring-inner {
-      animation: spinLeft 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      transform-origin: 200px 200px;
+    .apex-spin-rev {
+      animation: spinRev 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 100px 100px;
     }
-    .core-pulse {
-      animation: pulseGlow 1.8s ease-in-out infinite alternate;
-      transform-origin: 200px 200px;
+    .apex-core {
+      animation: corePulse 1.2s ease-in-out infinite alternate;
+      transform-origin: 100px 100px;
     }
-    .fang-left {
-      animation: floatLeft 2.4s ease-in-out infinite alternate;
-      transform-origin: 200px 200px;
-    }
-    .fang-right {
-      animation: floatRight 2.4s ease-in-out infinite alternate;
-      transform-origin: 200px 200px;
-    }
-    .particle {
-      animation: orbit 3s linear infinite;
-      transform-origin: 200px 200px;
-    }
-    .particle-delay-1 { animation-delay: -1s; }
-    .particle-delay-2 { animation-delay: -2s; }
 
-    @keyframes spinRight {
+    @keyframes spinLinear {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    @keyframes spinLeft {
+    @keyframes spinRev {
       0% { transform: rotate(360deg); }
       100% { transform: rotate(0deg); }
     }
-    @keyframes pulseGlow {
-      0% { transform: scale(0.92); opacity: 0.8; filter: drop-shadow(0 0 8px #9333EA); }
-      100% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 20px #06B6D4); }
-    }
-    @keyframes floatLeft {
-      0% { transform: translateY(-4px) rotate(-1deg); }
-      100% { transform: translateY(4px) rotate(1deg); }
-    }
-    @keyframes floatRight {
-      0% { transform: translateY(4px) rotate(1deg); }
-      100% { transform: translateY(-4px) rotate(-1deg); }
-    }
-    @keyframes orbit {
-      0% { transform: rotate(0deg) translateX(110px) rotate(0deg); }
-      100% { transform: rotate(360deg) translateX(110px) rotate(-360deg); }
+    @keyframes corePulse {
+      0% { transform: scale(0.88); opacity: 0.7; }
+      100% { transform: scale(1.12); opacity: 1; }
     }
   </style>
 
-  <!-- Ambient Glow -->
-  <circle cx="200" cy="200" r="180" fill="url(#vGlow)" />
+  <!-- Outer Track -->
+  <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="3" />
 
-  <!-- Outer Cyber Tech Ring -->
-  <g class="ring-outer">
-    <circle cx="200" cy="200" r="140" fill="none" stroke="url(#vPurple)" stroke-width="3" stroke-dasharray="40 20 80 15 20 30" opacity="0.85" filter="url(#neonBlur)" />
-    <circle cx="200" cy="60" r="4" fill="#C084FC" />
-    <circle cx="200" cy="340" r="4" fill="#06B6D4" />
+  <!-- Animated Outer Glow Arc -->
+  <g class="apex-spin-arc">
+    <circle cx="100" cy="100" r="70" fill="none" stroke="url(#apexGrad1)" stroke-width="4" stroke-linecap="round" stroke-dasharray="120 220" />
+    <circle cx="100" cy="30" r="4.5" fill="#38BDF8" />
   </g>
 
-  <!-- Inner Counter-Rotating Cyan Ring -->
-  <g class="ring-inner">
-    <circle cx="200" cy="200" r="115" fill="none" stroke="url(#vCyan)" stroke-width="2.5" stroke-dasharray="15 35 60 20" opacity="0.9" filter="url(#neonBlur)" />
-    <polygon points="200,85 204,95 196,95" fill="#22D3EE" />
-    <polygon points="200,315 204,305 196,305" fill="#A855F7" />
+  <!-- Inner Counter-Spinning Arc -->
+  <g class="apex-spin-rev">
+    <circle cx="100" cy="100" r="50" fill="none" stroke="url(#apexGrad2)" stroke-width="3" stroke-linecap="round" stroke-dasharray="70 180" />
+    <circle cx="100" cy="50" r="3.5" fill="#34D399" />
   </g>
 
-  <!-- Orbiting Energy Sparks -->
-  <circle class="particle" cx="200" cy="200" r="5" fill="#34D399" filter="url(#neonBlur)" />
-  <circle class="particle particle-delay-1" cx="200" cy="200" r="4" fill="#22D3EE" filter="url(#neonBlur)" />
-  <circle class="particle particle-delay-2" cx="200" cy="200" r="4.5" fill="#C084FC" filter="url(#neonBlur)" />
-
-  <!-- Central Venom AI Crest (Animated Pulsing Core) -->
-  <g class="core-pulse">
-    <!-- Left Symbiote Fang -->
-    <path class="fang-left" d="M 115 130 C 135 160, 165 210, 200 290 C 185 240, 155 195, 130 170 Z" fill="url(#vPurple)" filter="url(#neonBlur)" />
-    <!-- Right Symbiote Fang -->
-    <path class="fang-right" d="M 285 130 C 265 160, 235 210, 200 290 C 215 240, 245 195, 270 170 Z" fill="url(#vCyan)" filter="url(#neonBlur)" />
-
-    <!-- Central Neural Core Diamond -->
-    <polygon points="200,165 228,215 200,265 172,215" fill="url(#vEmerald)" filter="url(#neonBlur)" />
-    <polygon points="200,180 216,215 200,250 184,215" fill="#FFFFFF" opacity="0.95" />
-    <circle cx="200" cy="215" r="5" fill="#10B981" />
+  <!-- Center Floating Node -->
+  <g class="apex-core">
+    <circle cx="100" cy="100" r="14" fill="#0F172A" stroke="url(#apexGrad1)" stroke-width="2" />
+    <polygon points="100,92 108,100 100,108 92,100" fill="#FFFFFF" />
   </g>
 </svg>

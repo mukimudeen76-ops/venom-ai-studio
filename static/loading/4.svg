@@ -1,84 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
   <defs>
-    <linearGradient id="vHelix1" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="apexGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#C084FC" />
-      <stop offset="100%" stop-color="#9333EA" />
+      <stop offset="100%" stop-color="#38BDF8" />
     </linearGradient>
-
-    <linearGradient id="vHelix2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38BDF8" />
-      <stop offset="100%" stop-color="#059669" />
-    </linearGradient>
-
-    <filter id="bloom4" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="5" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
   </defs>
 
   <style>
-    .spin-ring-1 {
-      animation: spinFast 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      transform-origin: 200px 200px;
+    .apex-flow-1 {
+      animation: flowSpin 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 100px 100px;
     }
-    .spin-ring-2 {
-      animation: spinRev 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      transform-origin: 200px 200px;
-    }
-    .plasma-core {
-      animation: plasmaPulse 1.6s ease-in-out infinite alternate;
-      transform-origin: 200px 200px;
-    }
-    .arc-glow {
-      animation: arcFlash 2s ease-in-out infinite alternate;
+    .apex-flow-2 {
+      animation: flowSpin 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.4s;
+      transform-origin: 100px 100px;
     }
 
-    @keyframes spinFast {
-      0% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(180deg) scale(1.06); }
-      100% { transform: rotate(360deg) scale(1); }
-    }
-    @keyframes spinRev {
-      0% { transform: rotate(360deg) scale(1.06); }
-      50% { transform: rotate(180deg) scale(0.96); }
-      100% { transform: rotate(0deg) scale(1.06); }
-    }
-    @keyframes plasmaPulse {
-      0% { transform: scale(0.85); opacity: 0.75; filter: drop-shadow(0 0 8px #9333EA); }
-      100% { transform: scale(1.18); opacity: 1; filter: drop-shadow(0 0 26px #38BDF8); }
-    }
-    @keyframes arcFlash {
-      0% { stroke-opacity: 0.4; stroke-width: 2px; }
-      100% { stroke-opacity: 1; stroke-width: 4px; }
+    @keyframes flowSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 
-  <!-- Ambient Dark Background Ring -->
-  <circle cx="200" cy="200" r="160" fill="#090D16" stroke="#1E293B" stroke-width="2" />
-
-  <!-- Dual Symbiote Energy Rings -->
-  <g class="spin-ring-1">
-    <ellipse cx="200" cy="200" rx="125" ry="60" fill="none" stroke="url(#vHelix1)" stroke-width="3.5" stroke-dasharray="80 20 40 30" filter="url(#bloom4)" />
-    <circle cx="325" cy="200" r="5" fill="#C084FC" filter="url(#bloom4)" />
-    <circle cx="75" cy="200" r="4" fill="#A855F7" filter="url(#bloom4)" />
+  <g class="apex-flow-1">
+    <ellipse cx="100" cy="100" rx="65" ry="30" fill="none" stroke="url(#apexGrad4)" stroke-width="3" stroke-dasharray="80 20" stroke-linecap="round" />
   </g>
 
-  <g class="spin-ring-2">
-    <ellipse cx="200" cy="200" rx="60" ry="125" fill="none" stroke="url(#vHelix2)" stroke-width="3" stroke-dasharray="60 30 50 20" filter="url(#bloom4)" />
-    <circle cx="200" cy="75" r="5" fill="#38BDF8" filter="url(#bloom4)" />
-    <circle cx="200" cy="325" r="4" fill="#34D399" filter="url(#bloom4)" />
+  <g class="apex-flow-2">
+    <ellipse cx="100" cy="100" rx="30" ry="65" fill="none" stroke="#34D399" stroke-width="2.5" stroke-dasharray="60 30" stroke-linecap="round" />
   </g>
 
-  <!-- Electric Cyber Cross Lines -->
-  <g class="arc-glow">
-    <line x1="160" y1="160" x2="240" y2="240" stroke="#38BDF8" stroke-dasharray="4 4" />
-    <line x1="240" y1="160" x2="160" y2="240" stroke="#C084FC" stroke-dasharray="4 4" />
-  </g>
-
-  <!-- Central Venom AI Quantum Reactor Core -->
-  <g class="plasma-core">
-    <circle cx="200" cy="200" r="28" fill="#1E1B4B" stroke="#A855F7" stroke-width="2.5" />
-    <circle cx="200" cy="200" r="16" fill="url(#vHelix2)" filter="url(#bloom4)" />
-    <circle cx="200" cy="200" r="6" fill="#FFFFFF" />
-  </g>
+  <circle cx="100" cy="100" r="10" fill="#1E1B4B" stroke="#38BDF8" stroke-width="2" />
+  <circle cx="100" cy="100" r="3" fill="#FFFFFF" />
 </svg>

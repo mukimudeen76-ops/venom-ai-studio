@@ -1,83 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
   <defs>
-    <radialGradient id="vGlow2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#06B6D4" stop-opacity="0.3" />
-      <stop offset="50%" stop-color="#9333EA" stop-opacity="0.15" />
-      <stop offset="100%" stop-color="#0B0F19" stop-opacity="0" />
-    </radialGradient>
-
-    <linearGradient id="vGradWave" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38BDF8" />
-      <stop offset="50%" stop-color="#A855F7" />
-      <stop offset="100%" stop-color="#34D399" />
+    <linearGradient id="apexLaser" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A855F7" />
+      <stop offset="100%" stop-color="#06B6D4" />
     </linearGradient>
-
-    <filter id="bloom2" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="5" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
   </defs>
 
   <style>
-    .wave-line {
-      animation: waveCycle 3s ease-in-out infinite alternate;
-      transform-origin: 200px 200px;
+    .pulse-ring-1 {
+      animation: pulseGrow 2s ease-out infinite;
+      transform-origin: 100px 100px;
     }
-    .wave-line-2 { animation-delay: -0.7s; }
-    .wave-line-3 { animation-delay: -1.4s; }
-
-    .node-pulse {
-      animation: nodeBlink 1.5s ease-in-out infinite alternate;
+    .pulse-ring-2 {
+      animation: pulseGrow 2s ease-out infinite 0.7s;
+      transform-origin: 100px 100px;
     }
-    .node-delay-1 { animation-delay: 0.3s; }
-    .node-delay-2 { animation-delay: 0.6s; }
-    .node-delay-3 { animation-delay: 0.9s; }
-
-    .venom-spin-core {
-      animation: coreSpin 8s linear infinite;
-      transform-origin: 200px 200px;
+    .orbit-dot-1 {
+      animation: dotOrbit 2s linear infinite;
+      transform-origin: 100px 100px;
     }
 
-    @keyframes waveCycle {
-      0% { transform: scaleY(0.85) rotate(-5deg); stroke-width: 2.5px; }
-      100% { transform: scaleY(1.15) rotate(5deg); stroke-width: 4px; }
+    @keyframes pulseGrow {
+      0% { transform: scale(0.3); opacity: 1; }
+      100% { transform: scale(1.3); opacity: 0; }
     }
-    @keyframes nodeBlink {
-      0% { r: 3; opacity: 0.4; fill: #A855F7; }
-      100% { r: 6.5; opacity: 1; fill: #22D3EE; }
-    }
-    @keyframes coreSpin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes dotOrbit {
+      0% { transform: rotate(0deg) translateX(45px) rotate(0deg); }
+      100% { transform: rotate(360deg) translateX(45px) rotate(-360deg); }
     }
   </style>
 
-  <!-- Ambient Backdrop -->
-  <circle cx="200" cy="200" r="175" fill="url(#vGlow2)" />
+  <!-- Glowing Ripples -->
+  <circle class="pulse-ring-1" cx="100" cy="100" r="45" fill="none" stroke="url(#apexLaser)" stroke-width="2.5" />
+  <circle class="pulse-ring-2" cx="100" cy="100" r="45" fill="none" stroke="#38BDF8" stroke-width="2" />
 
-  <!-- Neural Cyber Matrix Connecting Waves -->
-  <g filter="url(#bloom2)">
-    <path class="wave-line" d="M 60 200 Q 130 110, 200 200 T 340 200" fill="none" stroke="url(#vGradWave)" opacity="0.85" />
-    <path class="wave-line wave-line-2" d="M 60 200 Q 130 290, 200 200 T 340 200" fill="none" stroke="url(#vGradWave)" opacity="0.75" />
-    <path class="wave-line wave-line-3" d="M 80 200 Q 200 130, 320 200" fill="none" stroke="#22D3EE" opacity="0.9" />
-  </g>
+  <!-- Orbiting Node -->
+  <circle class="orbit-dot-1" cx="100" cy="100" r="4.5" fill="#38BDF8" />
 
-  <!-- Rotating Geometric Symbiote Shards -->
-  <g class="venom-spin-core">
-    <polygon points="200,100 215,140 200,130 185,140" fill="#C084FC" opacity="0.9" />
-    <polygon points="300,200 260,215 270,200 260,185" fill="#38BDF8" opacity="0.9" />
-    <polygon points="200,300 185,260 200,270 215,260" fill="#34D399" opacity="0.9" />
-    <polygon points="100,200 140,185 130,200 140,215" fill="#A855F7" opacity="0.9" />
-  </g>
-
-  <!-- Animated Neural Nodes -->
-  <circle class="node-pulse" cx="130" cy="155" r="5" />
-  <circle class="node-pulse node-delay-1" cx="270" cy="155" r="5" />
-  <circle class="node-pulse node-delay-2" cx="130" cy="245" r="5" />
-  <circle class="node-pulse node-delay-3" cx="270" cy="245" r="5" />
-
-  <!-- Center Glowing Core Node -->
-  <circle cx="200" cy="200" r="14" fill="#1E1B4B" stroke="#A855F7" stroke-width="2" />
-  <circle cx="200" cy="200" r="7" fill="#38BDF8" filter="url(#bloom2)" />
-  <circle cx="200" cy="200" r="3" fill="#FFFFFF" />
+  <!-- Center Core -->
+  <circle cx="100" cy="100" r="16" fill="#111827" stroke="#A855F7" stroke-width="2" />
+  <circle cx="100" cy="100" r="7" fill="#34D399" />
+  <circle cx="100" cy="100" r="2.5" fill="#FFFFFF" />
 </svg>
