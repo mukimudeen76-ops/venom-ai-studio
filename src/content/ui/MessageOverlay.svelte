@@ -24,6 +24,20 @@
   import { t } from "../../lib/i18n.svelte.js";
   import { parseLooseJson } from "../parser/json-repair.js";
   import { triggerTextDownload } from "../../lib/utils/download.js";
+  import { voiceEngine } from "../../lib/voice-engine.js";
+
+  let isReadingMessage = $state(false);
+
+  function speakMessageText(fullText) {
+    if (isReadingMessage) {
+      voiceEngine.stopSpeaking();
+      isReadingMessage = false;
+    } else {
+      isReadingMessage = true;
+      voiceEngine.onSpeechEnd = () => { isReadingMessage = false; };
+      voiceEngine.speak(fullText);
+    }
+  }
 
 
   /** 
@@ -198,8 +212,23 @@
   {#each interleave(text, blocks) as segment}
     {#if segment.type === 'text'}
       {#if segment.content?.trim()}
-        <div class="ds-markdown bds-sanitized-text">
-          {@html marked.parse(segment.content)}
+        <div class="bds-text-wrapper" style="position: relative;">
+          <button
+            type="button"
+            class="bds-speak-aloud-btn"
+            onclick={() => speakMessageText(segment.content)}
+            title="Read Response Aloud (Text-to-Speech)"
+            aria-label="Read Message Aloud"
+          >
+            {#if isReadingMessage}
+              <span style="color: #EF4444;">🛑 Stop</span>
+            {:else}
+              <span>🔊 Listen</span>
+            {/if}
+          </button>
+          <div class="ds-markdown bds-sanitized-text">
+            {@html marked.parse(segment.content)}
+          </div>
         </div>
       {/if}
     {:else}
@@ -1063,6 +1092,26 @@
   background: var(--bds-bg-hover, rgba(255,255,255,0.08));
   color: var(--bds-accent, #5b7bff);
   border-color: var(--bds-accent, #5b7bff);
+}
+
+.bds-speak-aloud-btn {
+  position: absolute;
+  top: -8px;
+  right: 0;
+  background: rgba(147, 51, 234, 0.15);
+  border: 1px solid rgba(147, 51, 234, 0.35);
+  color: var(--bds-accent, #C084FC);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.15s ease;
+}
+.bds-speak-aloud-btn:hover {
+  background: var(--bds-accent, #9333EA);
+  color: #FFFFFF;
 }
 
 </style>
