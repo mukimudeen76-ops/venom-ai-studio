@@ -3,9 +3,9 @@ import { t } from "../../lib/i18n.svelte.js";
 export const COMMANDS = [
   {
     id: "search",
-    aliases: [],
-    name: "Web Search",
-    description: "Search the web and inject results into chat",
+    aliases: ["find"],
+    name: "Deep Web Search",
+    description: "Search the web and inject multi-source intelligence into chat",
     usage: "/search <query>",
     category: "tools",
     descKey: "commands.cmdSearchDesc",
@@ -69,6 +69,58 @@ export const COMMANDS = [
     minArgs: 0,
   },
   {
+    id: "audit",
+    aliases: ["hack", "security"],
+    name: "Security & Vulnerability Audit",
+    description: "Audit code, endpoints, or architectures against OWASP Top 10 vulnerabilities",
+    usage: "/audit <code or target>",
+    category: "tools",
+    descKey: "commands.cmdSearchDesc",
+    usageKey: "commands.cmdSearchUsage",
+    catKey: "commands.cattools",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    minArgs: 0,
+  },
+  {
+    id: "push",
+    aliases: ["gitpush", "deploy"],
+    name: "Autonomous GitHub Push",
+    description: "Verify tests, auto-heal errors, commit, and push directly to GitHub",
+    usage: "/push [commit message]",
+    category: "tools",
+    descKey: "commands.cmdExportDesc",
+    usageKey: "commands.cmdExportUsage",
+    catKey: "commands.cattools",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>`,
+    minArgs: 0,
+  },
+  {
+    id: "agent",
+    aliases: ["ci", "fix"],
+    name: "Autonomous Terminal Agent",
+    description: "Execute bash commands with live error interception and self-healing",
+    usage: "/agent <command>",
+    category: "tools",
+    descKey: "commands.cmdSearchDesc",
+    usageKey: "commands.cmdSearchUsage",
+    catKey: "commands.cattools",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>`,
+    minArgs: 0,
+  },
+  {
+    id: "voice",
+    aliases: ["speak", "live"],
+    name: "Live Voice Interaction",
+    description: "Launch the full-screen Gemini Live style voice conversation suite",
+    usage: "/voice",
+    category: "tools",
+    descKey: "commands.cmdSearchDesc",
+    usageKey: "commands.cmdSearchUsage",
+    catKey: "commands.cattools",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>`,
+    minArgs: 0,
+  },
+  {
     id: "help",
     aliases: ["?"],
     name: "Help",
@@ -81,20 +133,20 @@ export const COMMANDS = [
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
     minArgs: 0,
   },
-]
+];
 
 export function findCommand(id) {
-  const lower = id.toLowerCase()
-  return COMMANDS.find(c => c.id === lower || c.aliases.includes(lower)) || null
+  const lower = id.toLowerCase();
+  return COMMANDS.find(c => c.id === lower || c.aliases.includes(lower)) || null;
 }
 
 export function getCommandSuggestions(partial) {
-  const lower = (partial || "").toLowerCase()
-  if (!lower) return COMMANDS
+  const lower = (partial || "").toLowerCase();
+  if (!lower) return COMMANDS;
   return COMMANDS.filter(c =>
     c.id.includes(lower) ||
     c.aliases.some(a => a.includes(lower)) ||
     c.name.toLowerCase().includes(lower) ||
     c.description.toLowerCase().includes(lower)
-  )
+  );
 }

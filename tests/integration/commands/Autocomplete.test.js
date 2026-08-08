@@ -111,7 +111,7 @@ describe("Autocomplete", () => {
 
   it("executes zero-arg command on Enter selection", async () => {
     const { editor, target, cleanup } = await setup();
-    type(editor, "/n");
+    type(editor, "/new");
     await flushUi();
     const dropdown = target.querySelector(".bds-cmd-dropdown");
     expect(dropdown).toBeTruthy();
