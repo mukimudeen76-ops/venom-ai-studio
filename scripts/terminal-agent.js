@@ -46,7 +46,7 @@ const log = {
   warn: (msg) => console.log(`${colors.yellow}⚠ [Agent]${colors.reset} ${msg}`),
   error: (msg) => console.log(`${colors.red}✖ [Agent]${colors.reset} ${colors.bold}${msg}${colors.reset}`),
   step: (step, total, msg) => console.log(`\n${colors.bold}${colors.blue}▶ [Step ${step}/${total}]${colors.reset} ${colors.bold}${msg}${colors.reset}`),
-  header: (title) => console.log(`\n${colors.bold}${colors.magenta}═════════════════════════════════════════════════════════════════════════\n  🤖 Venom AI Studio - Autonomous Terminal Agent: ${title}\n═════════════════════════════════════════════════════════════════════════${colors.reset}\n`),
+  header: (title) => console.log(`\n${colors.bold}${colors.magenta}═════════════════════════════════════════════════════════════════════════\n  🤖 Nexo AI - Autonomous Terminal Agent: ${title}\n═════════════════════════════════════════════════════════════════════════${colors.reset}\n`),
 };
 
 // Ask questions interactively in terminal
@@ -119,7 +119,7 @@ function parseArgs() {
 
 function printHelp() {
   console.log(`
-${colors.bold}Venom AI Studio - Autonomous Terminal Agent${colors.reset}
+${colors.bold}Nexo AI - Autonomous Terminal Agent${colors.reset}
 
 Usage:
   node scripts/terminal-agent.js [options]

@@ -1,11 +1,11 @@
 /**
- * Apex AI - Universal Brand Patcher & DOM Cleaner
+ * Nexo AI - Universal Brand Patcher & DOM Cleaner
  * 
  * Thoroughly sanitizes and replaces any occurrence of "DeepSeek" across the DOM,
  * including page headers, login popups, OTP verification dialogs, placeholders, and titles.
  */
 
-const TARGET_BRAND = "Apex AI";
+const TARGET_BRAND = "Nexo AI";
 
 export function initBrandPatcher() {
   if (typeof document === 'undefined') return;

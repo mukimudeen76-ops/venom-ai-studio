@@ -60,7 +60,7 @@ describe("App toggle button", () => {
 
     const toggle = target.querySelector("#bds-toggle");
     expect(toggle).not.toBeNull();
-    expect(toggle.getAttribute("aria-label")).toBe("Nexus Omni Studio");
+    expect(toggle.getAttribute("aria-label")).toBe("Nexo AI");
 
     cleanup();
   });

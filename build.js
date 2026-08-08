@@ -259,8 +259,9 @@ async function run() {
 
     addDirToZipSync(distDir);
     const zipped = zipSync(zipData);
+    writeFileSync(resolve(__dirname, `nexo-ai-${target}.zip`), zipped);
     writeFileSync(resolve(__dirname, `venom-ai-${target}.zip`), zipped);
-    console.log(`✅ ZIP created successfully: venom-ai-${target}.zip\n`);
+    console.log(`✅ ZIP created successfully: nexo-ai-${target}.zip & venom-ai-${target}.zip\n`);
   } catch (e) {
     console.error("❌ ZIP creation failed:", e.message);
   }

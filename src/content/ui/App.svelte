@@ -133,7 +133,7 @@
   });
 </script>
 
-<button id="bds-toggle" type="button" onclick={toggleDrawer} aria-label="Nexus Omni Studio">
+<button id="bds-toggle" type="button" onclick={toggleDrawer} aria-label="Nexo AI">
   <span class="bds-toggle-full" aria-hidden="true">BDS</span>
   <span class="bds-toggle-short" aria-hidden="true">B</span>
 </button>

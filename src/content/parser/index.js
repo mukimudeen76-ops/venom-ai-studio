@@ -37,6 +37,23 @@ function stripMarkdownLinks(text) {
   return String(text || "").replace(MARKDOWN_LINK_RE, (_, linkText) => linkText);
 }
 
+function isIndexInRange(idx, ranges) {
+  let low = 0;
+  let high = ranges.length - 1;
+  while (low <= high) {
+    const mid = (low + high) >> 1;
+    const r = ranges[mid];
+    if (idx < r.start) {
+      high = mid - 1;
+    } else if (idx >= r.end) {
+      low = mid + 1;
+    } else {
+      return true;
+    }
+  }
+  return false;
+}
+
 /**
  * Compute ranges of fenced code blocks and inline code in text.
  * Used to exclude BDS tags inside code blocks from tool processing.
@@ -54,12 +71,18 @@ function computeCodeBlockRanges(text) {
   // Inline code: `...` (skip if already inside a fenced block — inline
   // can't span fence boundaries because `[^`\n]+` excludes newlines)
   const inlineRe = /`([^`\n]+)`/g;
+  let inlineAdded = false;
   while ((match = inlineRe.exec(text)) !== null) {
     const { index } = match;
-    if (!ranges.some(r => index >= r.start && index < r.end)) {
+    if (!isIndexInRange(index, ranges)) {
       const end = index + match[0].length;
       ranges.push({ start: index, end });
+      inlineAdded = true;
     }
+  }
+
+  if (inlineAdded && ranges.length > 1) {
+    ranges.sort((a, b) => a.start - b.start);
   }
 
   return ranges;
@@ -75,8 +98,7 @@ export function parseBdsMessage(rawText, isSettled = false) {
   // Compute code block ranges once — BDS tags inside these ranges are
   // documentation examples, not actual tool invocations.
   const codeBlockRanges = computeCodeBlockRanges(text);
-  const isInsideCodeBlock = (idx) =>
-    codeBlockRanges.some(r => idx >= r.start && idx < r.end);
+  const isInsideCodeBlock = (idx) => isIndexInRange(idx, codeBlockRanges);
 
   // Intercept unclosed tags if the message is fully settled (AI stopped generating).
   // This prevents infinite "Working..." animations and lost tool output.

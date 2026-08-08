@@ -168,32 +168,36 @@ export function findLatestAssistantMessageNode(nodes) {
   return null;
 }
 
+const roleCache = new WeakMap();
+
 /**
  * Detect the role of a message DOM node.
  */
 export function detectMessageRole(node) {
+  if (!node || typeof node !== "object") return "unknown";
+  const cached = roleCache.get(node);
+  if (cached) return cached;
+
+  let role = "unknown";
   if (node.classList && node.classList.contains("d29f3d7d")) {
-    return "user";
+    role = "user";
+  } else if (node.closest?.("div._4f9bf79._43c05b5")) {
+    role = "assistant";
+  } else if (node.closest?.("div._9663006")) {
+    role = "user";
+  } else if (node.classList && node.classList.contains("ds-message")) {
+    role = "assistant";
+  } else {
+    const roleAttr = node.getAttribute?.("data-message-author-role");
+    if (roleAttr) {
+      role = String(roleAttr).toLowerCase();
+    }
   }
 
-  if (node.closest("div._4f9bf79._43c05b5")) {
-    return "assistant";
+  if (role !== "unknown") {
+    roleCache.set(node, role);
   }
-
-  if (node.closest("div._9663006")) {
-    return "user";
-  }
-
-  if (node.classList && node.classList.contains("ds-message")) {
-    return "assistant";
-  }
-
-  const roleAttr = node.getAttribute("data-message-author-role");
-  if (roleAttr) {
-    return String(roleAttr).toLowerCase();
-  }
-
-  return "unknown";
+  return role;
 }
 
 /**

@@ -47,7 +47,7 @@
         </div>
       </div>
 
-      <div class="splash-title">NEXUS OMNI STUDIO</div>
+      <div class="splash-title">NEXO AI</div>
       <div class="splash-tagline">Autonomous Multi-AI Super Engineering & Security Studio</div>
 
       <!-- Developer & Mastermind Badge -->

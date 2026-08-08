@@ -1,7 +1,7 @@
 {
-  "name": "nexus-omni-studio",
+  "name": "nexo-ai",
   "version": "1.0.0",
-  "description": "Nexus Omni Studio - The Premier Autonomous Multi-AI Engineering & Security Studio masterminded by Tehzeeb (@xtehzeeb.x).",
+  "description": "Nexo AI - The Premier Autonomous Multi-AI Engineering & Security Studio masterminded by Tehzeeb (@xtehzeeb.x).",
   "private": true,
   "type": "module",
   "scripts": {

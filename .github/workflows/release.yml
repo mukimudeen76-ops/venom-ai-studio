@@ -130,16 +130,16 @@ jobs:
 
           APK_SRC=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
 
-          CHROME_ZIP=$(ls venom-ai-chrome.zip nexus-omni-chrome.zip 2>/dev/null | head -n 1)
-          FIREFOX_ZIP=$(ls venom-ai-firefox.zip nexus-omni-firefox.zip 2>/dev/null | head -n 1)
+          CHROME_ZIP=$(ls nexo-ai-chrome.zip venom-ai-chrome.zip nexus-omni-chrome.zip 2>/dev/null | head -n 1)
+          FIREFOX_ZIP=$(ls nexo-ai-firefox.zip venom-ai-firefox.zip nexus-omni-firefox.zip 2>/dev/null | head -n 1)
 
-          cp "$CHROME_ZIP" nexus-omni-chrome-latest.zip
-          cp "$FIREFOX_ZIP" nexus-omni-firefox-latest.zip
-          cp "$APK_SRC" nexus-omni-android-latest-signed.apk
+          cp "$CHROME_ZIP" nexo-ai-chrome-latest.zip
+          cp "$FIREFOX_ZIP" nexo-ai-firefox-latest.zip
+          cp "$APK_SRC" nexo-ai-android-latest-signed.apk
 
-          cp "$CHROME_ZIP" "nexus-omni-chrome-${AUTO_TAG}.zip"
-          cp "$FIREFOX_ZIP" "nexus-omni-firefox-${AUTO_TAG}.zip"
-          cp "$APK_SRC" "nexus-omni-android-${AUTO_TAG}-signed.apk"
+          cp "$CHROME_ZIP" "nexo-ai-chrome-${AUTO_TAG}.zip"
+          cp "$FIREFOX_ZIP" "nexo-ai-firefox-${AUTO_TAG}.zip"
+          cp "$APK_SRC" "nexo-ai-android-${AUTO_TAG}-signed.apk"
 
       - name: Auto Tag Commit in Repository
         run: |
@@ -154,26 +154,26 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.prep.outputs.tag }}
-          name: "Nexus Omni Studio ${{ steps.prep.outputs.tag }} (Build #${{ steps.prep.outputs.commit_count }})"
+          name: "Nexo AI ${{ steps.prep.outputs.tag }} (Build #${{ steps.prep.outputs.commit_count }})"
           body: |
-            ## 🚀 Nexus Omni Studio - Release ${{ steps.prep.outputs.tag }}
+            ## 🚀 Nexo AI - Release ${{ steps.prep.outputs.tag }}
             
             **Masterminded & Developed by Tehzeeb** (Instagram: `@xtehzeeb.x`)
             
             ### 📦 Downloadable Release Packages:
-            - **📱 Android App**: `nexus-omni-android-${{ steps.prep.outputs.tag }}-signed.apk` (Digitally signed APK)
-            - **🌐 Chrome Extension**: `nexus-omni-chrome-${{ steps.prep.outputs.tag }}.zip`
-            - **🦊 Firefox Add-on**: `nexus-omni-firefox-${{ steps.prep.outputs.tag }}.zip`
+            - **📱 Android App**: `nexo-ai-android-${{ steps.prep.outputs.tag }}-signed.apk` (Digitally signed APK)
+            - **🌐 Chrome Extension**: `nexo-ai-chrome-${{ steps.prep.outputs.tag }}.zip`
+            - **🦊 Firefox Add-on**: `nexo-ai-firefox-${{ steps.prep.outputs.tag }}.zip`
             
             ### ⚡ Built from Commit:
             - Commit: `${{ steps.prep.outputs.short_sha }}`
           files: |
-            nexus-omni-android-${{ steps.prep.outputs.tag }}-signed.apk
-            nexus-omni-chrome-${{ steps.prep.outputs.tag }}.zip
-            nexus-omni-firefox-${{ steps.prep.outputs.tag }}.zip
-            nexus-omni-android-latest-signed.apk
-            nexus-omni-chrome-latest.zip
-            nexus-omni-firefox-latest.zip
+            nexo-ai-android-${{ steps.prep.outputs.tag }}-signed.apk
+            nexo-ai-chrome-${{ steps.prep.outputs.tag }}.zip
+            nexo-ai-firefox-${{ steps.prep.outputs.tag }}.zip
+            nexo-ai-android-latest-signed.apk
+            nexo-ai-chrome-latest.zip
+            nexo-ai-firefox-latest.zip
           generate_release_notes: true
           make_latest: true
         env:
