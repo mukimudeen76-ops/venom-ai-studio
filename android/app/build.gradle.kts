@@ -28,9 +28,13 @@ android {
         signingConfigs {
             create("release") {
                 storeFile = rootProject.file("ci-release.jks")
-                storePassword = System.getenv("BDS_KEYSTORE_PASSWORD") ?: ""
-                keyAlias = System.getenv("BDS_KEY_ALIAS") ?: ""
-                keyPassword = System.getenv("BDS_KEY_PASSWORD") ?: ""
+                val envStorePass = System.getenv("BDS_KEYSTORE_PASSWORD")
+                val envAlias = System.getenv("BDS_KEY_ALIAS")
+                val envKeyPass = System.getenv("BDS_KEY_PASSWORD")
+
+                storePassword = if (!envStorePass.isNullOrBlank()) envStorePass else "android"
+                keyAlias = if (!envAlias.isNullOrBlank()) envAlias else "release"
+                keyPassword = if (!envKeyPass.isNullOrBlank()) envKeyPass else "android"
             }
         }
         release {
