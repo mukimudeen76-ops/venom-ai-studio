@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Venom AI Studio</string>
+    <string name="bds_target_url">https://chat.deepseek.com/</string>
+    <string name="bds_asset_authority">venom-ai-asset.local</string>
+</resources>

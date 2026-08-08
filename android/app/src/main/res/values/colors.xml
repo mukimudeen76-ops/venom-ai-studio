@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="launcher_background">#0B0E17</color>
+    <color name="venom_primary">#A855F7</color>
+    <color name="venom_accent">#06B6D4</color>
+    <color name="venom_emerald">#10B981</color>
+</resources>
