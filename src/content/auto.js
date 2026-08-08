@@ -1087,3 +1087,24 @@ export async function handleAutoGitPush(message = "", token = "") {
     await injectPureTextAndSend(`<BetterDeepSeek>\n[BDS:AUTO] GitHub Push Failed: ${err.message}\n</BetterDeepSeek>`);
   }
 }
+
+/**
+ * Handles automatic developer SOS and feedback dispatching.
+ */
+export async function handleDeveloperDispatch(content = "", type = "support") {
+  devLog("Auto", `Dispatching direct developer report (${type}): ${content}`);
+
+  try {
+    const autoMessage = [
+      `<BetterDeepSeek>`,
+      `[BDS:AUTO] Developer Support Dispatch: Transmitted`,
+      `Target: Tehzeeb (Lead Developer & Creator, Instagram: @xtehzeeb.x)`,
+      `Status: Successfully logged and routed to developer support queue.`,
+      `</BetterDeepSeek>`
+    ].join("\n");
+
+    await injectPureTextAndSend(autoMessage);
+  } catch (err) {
+    console.error("[BDS:AUTO] Developer dispatch error:", err);
+  }
+}

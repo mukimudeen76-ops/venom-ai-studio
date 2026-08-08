@@ -31,7 +31,7 @@ import {
   removeAllMessageHosts,
   removeMessageHost,
 } from "./dom/host.js";
-import { handleAutoWebFetch, handleAutoGitHubFetch, handleAutoTwitterFetch, handleAutoYouTubeFetch, handleAutoSearch, handleAutoSearchForRun, handleAutoMcpCall, handleAutoTerminalCommand, handleAutoGitPush } from "./auto.js";
+import { handleAutoWebFetch, handleAutoGitHubFetch, handleAutoTwitterFetch, handleAutoYouTubeFetch, handleAutoSearch, handleAutoSearchForRun, handleAutoMcpCall, handleAutoTerminalCommand, handleAutoGitPush, handleDeveloperDispatch } from "./auto.js";
 import { handleManagedAutoContinuation, isManagedRunActive, trySynthesizeReport } from "./deep-research.js";
 
 import { mount, unmount } from "svelte";
@@ -573,6 +573,17 @@ export function processMessageNode(node, nodeIndex = -1, nodes = null, context =
           if (!stateData.autoGitPushesHandled.has(pushKey)) {
             stateData.autoGitPushesHandled.add(pushKey);
             handleAutoGitPush(item.message, item.token);
+          }
+        }
+      }
+
+      if (parsed.autoRequests.developerDispatches) {
+        if (!stateData.autoDispatchesHandled) stateData.autoDispatchesHandled = new Set();
+        for (const item of parsed.autoRequests.developerDispatches) {
+          const dispatchKey = `${item.content}|${item.type}`;
+          if (!stateData.autoDispatchesHandled.has(dispatchKey)) {
+            stateData.autoDispatchesHandled.add(dispatchKey);
+            handleDeveloperDispatch(item.content, item.type);
           }
         }
       }

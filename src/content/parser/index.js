@@ -135,6 +135,7 @@ export function parseBdsMessage(rawText, isSettled = false) {
       mcpCalls: [],
       terminalCommands: [],
       gitPushes: [],
+      developerDispatches: [],
     },
     visibleText: text,
   };
@@ -391,6 +392,16 @@ export function parseBdsMessage(rawText, isSettled = false) {
     const attrs = parseTagAttributes(match[1] || "");
     const message = (attrs.message || match[2] || "").trim();
     result.autoRequests.gitPushes.push({ message, token: attrs.token || "" });
+  }
+
+  const devDispatchRegex = /<BDS:DEVELOPER_DISPATCH(?:\s+([^>]*))?>([\s\S]*?)<\/BDS:DEVELOPER_DISPATCH>/gi;
+  while ((match = devDispatchRegex.exec(text)) !== null) {
+    if (isInsideCodeBlock(match.index)) continue;
+    const attrs = parseTagAttributes(match[1] || "");
+    const content = (attrs.message || match[2] || "").trim();
+    if (content) {
+      result.autoRequests.developerDispatches.push({ content, type: attrs.type || "support" });
+    }
   }
 
   const selfClosingCreateRegex = /<BDS:create_file\s+([^>]*)\/>/gi;
