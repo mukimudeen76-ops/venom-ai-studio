@@ -56,5 +56,5 @@ test("drawer is right-anchored when opened on desktop", async ({ page }) => {
 });
 
 test("toggle carries correct aria-label on desktop", async ({ page }) => {
-  await expect(page.locator("#bds-toggle")).toHaveAttribute("aria-label", "Better DeepSeek");
+  await expect(page.locator("#bds-toggle")).toHaveAttribute("aria-label", "Venom AI Studio");
 });

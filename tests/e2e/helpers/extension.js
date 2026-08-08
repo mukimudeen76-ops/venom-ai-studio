@@ -61,15 +61,18 @@ async function createExtensionContext() {
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), "bds-playwright-"));
   let context;
   try {
-    context = await chromium.launchPersistentContext(userDataDir, {
-      channel: "chromium",
+    const launchOptions = {
       headless: !!process.env.CI,
       viewport: { width: 1440, height: 1100 },
       args: [
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`,
       ],
-    });
+    };
+    if (process.env.CHROMIUM_CHANNEL) {
+      launchOptions.channel = process.env.CHROMIUM_CHANNEL;
+    }
+    context = await chromium.launchPersistentContext(userDataDir, launchOptions);
   } catch (e) {
     // Cleanup on launch failure
     try { fs.rmSync(userDataDir, { recursive: true, force: true }); } catch {}
