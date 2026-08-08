@@ -81,7 +81,7 @@ describe("storage integration", () => {
   it("upgrades legacy system prompts and download behavior", async () => {
     setChromeStorage({
       [STORAGE_KEYS.settings]: {
-        systemPrompt: "You are Better DeepSeek, an output-focused assistant with tool tags.",
+        systemPrompt: "You are Venom AI Studio, an output-focused assistant with tool tags.",
         systemPromptTemplateVersion: 1,
         downloadBehaviorVersion: 0,
       },

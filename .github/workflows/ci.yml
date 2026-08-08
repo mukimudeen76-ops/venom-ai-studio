@@ -33,7 +33,7 @@ jobs:
             ${{ runner.os }}-playwright-
 
       - name: Install Playwright browser & deps
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium --with-deps
 
       - name: Build Chrome extension
         run: npm run build:chrome
@@ -42,7 +42,9 @@ jobs:
         run: npm run test:unit
 
       - name: Run Playwright suite
-        run: npm run test:e2e
+        run: npx playwright test
+        env:
+          CI: "1"
 
       - name: Upload coverage artifact
         if: always()

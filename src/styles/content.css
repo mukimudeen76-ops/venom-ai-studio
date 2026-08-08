@@ -5016,3 +5016,31 @@ tr:hover .bds-row-hide-btn:hover {
   line-height: 1.4;
   color: var(--bds-text-secondary, #6b6b6b);
 }
+
+/* ══════════════════════════════════════════════
+   Venom AI Studio — UI Rebranding & Theme Styling
+   ══════════════════════════════════════════════ */
+
+/* Hide DeepSeek brand logos and text */
+[class*="ds-logo"], [class*="chat-logo"], header a[href="/"] svg, nav a[href="/"] svg, img[src*="deepseek"] {
+  display: none !important;
+}
+
+/* Inject Venom AI Studio logo & title */
+header a[href="/"]::after, nav a[href="/"]::after {
+  content: "⚡ Venom AI Studio" !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.6px !important;
+  background: linear-gradient(135deg, #C084FC, #06B6D4) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  display: inline-block !important;
+  padding: 2px 6px !important;
+}
+
+/* Hide DeepSeek download mobile app promotional banners */
+a[href*="app.deepseek.com"], a[href*="deepseek.com/download"], [class*="download-app"] {
+  display: none !important;
+}

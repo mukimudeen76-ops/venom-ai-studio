@@ -311,6 +311,11 @@ class MainActivity : ComponentActivity() {
         pendingPickFilesRequestId = savedInstanceState?.getString(STATE_PENDING_PICK_REQUEST_ID)
         pendingPickFilesMode = savedInstanceState?.getString(STATE_PENDING_PICK_MODE)
 
+        // Ensure runtime audio recording permissions are requested for live voice mode
+        if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            androidx.core.app.ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.RECORD_AUDIO), 101)
+        }
+
         bridge.onPickFiles = { mode, requestId ->
             runOnUiThread {
                 try {
@@ -557,6 +562,10 @@ class MainActivity : ComponentActivity() {
 
     private fun bdsWebChromeClient() =
             object : WebChromeClient() {
+                override fun onPermissionRequest(request: android.webkit.PermissionRequest?) {
+                    request?.grant(request.resources)
+                }
+
                 override fun onShowFileChooser(
                         webView: WebView?,
                         filePathCallback: ValueCallback<Array<Uri>>?,
