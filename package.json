@@ -2,6 +2,8 @@
   "name": "nexo-ai",
   "version": "1.0.0",
   "description": "Nexo AI - The Premier Autonomous Multi-AI Engineering & Security Studio masterminded by Tehzeeb (@xtehzeeb.x).",
+  "author": "Tehzeeb <xtehzeeb.x7@gmail.com> (https://instagram.com/xtehzeeb.x)",
+  "homepage": "https://instagram.com/xtehzeeb.x",
   "private": true,
   "type": "module",
   "scripts": {
