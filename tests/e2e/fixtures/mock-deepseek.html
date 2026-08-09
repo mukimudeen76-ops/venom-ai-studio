@@ -274,8 +274,71 @@
         z-index: 200;
       }
     </style>
+
+  </head>
+  <body>
+    <button id="mock-settings-trigger" class="mock-settings-trigger" data-testid="settings-trigger" title="Settings">&#8943;</button>
+
+    <div class="mock-get-app-bar" data-testid="get-app-container">
+      <button type="button">
+        <span aria-hidden="true">&#128241;</span>
+        <span>Get App</span>
+      </button>
+    </div>
+    <div class="app-shell">
+      <aside class="dc04ec1d">
+        <div class="mock-sidebar-title">History</div>
+        <div tabindex="0" class="mock-new-chat">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 0.599609L8 15.4" stroke="currentColor" stroke-width="1.5"></path>
+            <path d="M0.600098 8H15.4001" stroke="currentColor" stroke-width="1.5"></path>
+          </svg>
+          <span>New Chat</span>
+        </div>
+
+        <div class="mock-history-list">
+          <div class="_3098d02">
+            <div class="mock-chat-item">
+              <a class="_546d736" data-session-id="mock-chat-1" href="/chat/s/mock-chat-1">
+                <span class="c08e6e93">Alpha Session</span>
+              </a>
+              <div class="_2090548" role="button" tabindex="0" aria-label="Open menu">...</div>
+            </div>
+            <div class="mock-chat-item">
+              <a class="_546d736" data-session-id="mock-chat-2" href="/chat/s/mock-chat-2">
+                <span class="c08e6e93">Beta Session</span>
+              </a>
+              <div class="_2090548" role="button" tabindex="0" aria-label="Open menu">...</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="mock-main">
+        <header class="mock-header">
+          <h1>Mock DeepSeek Workspace</h1>
+          <p>Fixture page used for Better DeepSeek browser-extension E2E coverage.</p>
+        </header>
+
+        <section id="chat-messages"></section>
+      </main>
+    </div>
+
+    <section class="composer-shell">
+      <div class="native-attach-btn" role="button" tabindex="0">Native Upload</div>
+      <input id="native-file-input" type="file" multiple />
+      <div class="ds-textarea">
+        <textarea id="chat-input" placeholder="Message DeepSeek"></textarea>
+      </div>
+      <button id="send-button" title="Send message" type="button">Send</button>
+    </section>
     <script>
       (() => {
+        window.__mockErrors = [];
+        window.addEventListener("error", (e) => { window.__mockErrors.push("ERR:" + e.message); });
+        window.addEventListener("unhandledrejection", (e) => { window.__mockErrors.push("REJ:" + String(e.reason)); });
+        try {
+
         function removeMenus() {
           document.querySelectorAll(".ds-dropdown-menu").forEach((menu) => menu.remove());
         }
@@ -575,65 +638,19 @@
           };
         }
 
-        window.addEventListener("DOMContentLoaded", init);
+        // FIX: route.fulfill se serve hote waqt readyState already 'complete' ho
+        // sakta hai — tab DOMContentLoaded kabhi fire nahi hota, init nahi chalta,
+        // aur window.__mockDeepSeek undefined rehta hai (20 Playwright tests fail).
+        if (document.readyState === "loading") {
+          window.addEventListener("DOMContentLoaded", init);
+        } else {
+          init();
+        }
+        } catch (err) {
+          window.__mockErrors.push("IIFE:" + (err && err.message ? err.message : String(err)));
+          throw err;
+        }
       })();
     </script>
-  </head>
-  <body>
-    <button id="mock-settings-trigger" class="mock-settings-trigger" data-testid="settings-trigger" title="Settings">&#8943;</button>
-
-    <div class="mock-get-app-bar" data-testid="get-app-container">
-      <button type="button">
-        <span aria-hidden="true">&#128241;</span>
-        <span>Get App</span>
-      </button>
-    </div>
-    <div class="app-shell">
-      <aside class="dc04ec1d">
-        <div class="mock-sidebar-title">History</div>
-        <div tabindex="0" class="mock-new-chat">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M8 0.599609L8 15.4" stroke="currentColor" stroke-width="1.5"></path>
-            <path d="M0.600098 8H15.4001" stroke="currentColor" stroke-width="1.5"></path>
-          </svg>
-          <span>New Chat</span>
-        </div>
-
-        <div class="mock-history-list">
-          <div class="_3098d02">
-            <div class="mock-chat-item">
-              <a class="_546d736" data-session-id="mock-chat-1" href="/chat/s/mock-chat-1">
-                <span class="c08e6e93">Alpha Session</span>
-              </a>
-              <div class="_2090548" role="button" tabindex="0" aria-label="Open menu">...</div>
-            </div>
-            <div class="mock-chat-item">
-              <a class="_546d736" data-session-id="mock-chat-2" href="/chat/s/mock-chat-2">
-                <span class="c08e6e93">Beta Session</span>
-              </a>
-              <div class="_2090548" role="button" tabindex="0" aria-label="Open menu">...</div>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <main class="mock-main">
-        <header class="mock-header">
-          <h1>Mock DeepSeek Workspace</h1>
-          <p>Fixture page used for Better DeepSeek browser-extension E2E coverage.</p>
-        </header>
-
-        <section id="chat-messages"></section>
-      </main>
-    </div>
-
-    <section class="composer-shell">
-      <div class="native-attach-btn" role="button" tabindex="0">Native Upload</div>
-      <input id="native-file-input" type="file" multiple />
-      <div class="ds-textarea">
-        <textarea id="chat-input" placeholder="Message DeepSeek"></textarea>
-      </div>
-      <button id="send-button" title="Send message" type="button">Send</button>
-    </section>
   </body>
 </html>

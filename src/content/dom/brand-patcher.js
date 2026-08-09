@@ -46,8 +46,15 @@ export function initBrandPatcher() {
   function patchNode(node) {
     if (!node) return;
 
-    // Text node sanitization
+    // Text node sanitization — but NEVER inside script/style/code/pre
     if (node.nodeType === Node.TEXT_NODE) {
+      const parent = node.parentElement;
+      if (parent) {
+        const pt = (parent.tagName || "").toUpperCase();
+        if (pt === "SCRIPT" || pt === "STYLE" || pt === "TEXTAREA" || pt === "CODE" || pt === "PRE") {
+          return;
+        }
+      }
       if (node.nodeValue && /deep\s*seek/i.test(node.nodeValue)) {
         node.nodeValue = sanitizeText(node.nodeValue);
       }
@@ -56,6 +63,13 @@ export function initBrandPatcher() {
 
     // Element node sanitization
     if (node.nodeType === Node.ELEMENT_NODE) {
+      // CRITICAL: SCRIPT / STYLE / TEXTAREA content kabhi mat chhedo —
+      // inline JS me 'DeepSeek' strings replace karne se source toot jata hai
+      // aur page ke scripts run nahi hote (mock fixture __mockDeepSeek undefined).
+      const tag = (node.tagName || "").toUpperCase();
+      if (tag === "SCRIPT" || tag === "STYLE" || tag === "TEXTAREA" || tag === "CODE" || tag === "PRE") {
+        return;
+      }
       // Input placeholders, values, and titles
       if (node.placeholder && /deep\s*seek/i.test(node.placeholder)) {
         node.placeholder = sanitizeText(node.placeholder);
