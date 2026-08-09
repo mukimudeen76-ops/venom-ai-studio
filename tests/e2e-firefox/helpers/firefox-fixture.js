@@ -201,7 +201,7 @@ export async function createFirefoxFixture() {
   // Verify fixture loaded + extension bootstrapped
   try {
     const pageTitle = await driver.getTitle();
-    if (!pageTitle.includes("Mock DeepSeek")) {
+    if (!pageTitle.includes("Mock DeepSeek") && !pageTitle.includes("Mock Nexo") && !pageTitle.includes("Nexo AI")) {
       throw new Error(
         `Fixture did not load. Page title: "${pageTitle}". ` +
         `Check that Firefox + Selenium WebDriver BiDi interception works.`
