@@ -339,6 +339,8 @@ class MainActivity : ComponentActivity() {
                 WebViewAssetLoader.Builder()
                         .setDomain(getString(R.string.bds_asset_authority))
                         .addPathHandler("/", WebViewAssetLoader.AssetsPathHandler(this))
+                        .addPathHandler("/bds/", WebViewAssetLoader.AssetsPathHandler(this))
+                        .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
                         .build()
 
         val isSystemDark = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==

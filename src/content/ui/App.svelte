@@ -14,7 +14,8 @@
   import SplashIntro from "./SplashIntro.svelte";
   import appState from "../state.js";
 
-  let drawerOpen = $state(false);
+  let isStandalone = typeof document !== "undefined" && (Boolean(document.getElementById("app")) || window.location.href.includes("index.html") || !window.location.href.includes("deepseek.com"));
+  let drawerOpen = $state(isStandalone);
   let apiPlaygroundOpen = $state(false);
   let whatsNewPending = $state(appState.whatsNewPending);
 
