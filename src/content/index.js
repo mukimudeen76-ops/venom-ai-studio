@@ -38,10 +38,13 @@ import { loadAllHistory, retainOnlyHistorySession } from "./load-all-history.js"
 
 const CONTENT_BOOTSTRAP_KEY = "__bdsContentBootstrapped";
 
+// Start brand patcher synchronously at document_start (0ms) so login page & OTP dialogs are sanitized before first paint
+initBrandPatcher();
+
 if (!window[CONTENT_BOOTSTRAP_KEY]) {
   window[CONTENT_BOOTSTRAP_KEY] = true;
   init().catch((error) => {
-    console.error("[BetterDeepSeek] Init error:", error);
+    console.error("[Nexo AI] Init error:", error);
   });
 }
 

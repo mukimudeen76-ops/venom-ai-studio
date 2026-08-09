@@ -1,55 +1,79 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <!-- Background Gradient -->
-    <radialGradient id="bgGlow" cx="50%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#1E1B4B" />
-      <stop offset="60%" stop-color="#0F172A" />
-      <stop offset="100%" stop-color="#090D16" />
+    <radialGradient id="nexoBg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#1B103A" />
+      <stop offset="55%" stop-color="#0B0F1E" />
+      <stop offset="100%" stop-color="#04060B" />
     </radialGradient>
 
-    <!-- Venom Purple-Cyan Laser Gradient -->
-    <linearGradient id="venomPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Electric Purple-to-Pink Neon Gradient -->
+    <linearGradient id="nexoPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E879F9" />
+      <stop offset="40%" stop-color="#C084FC" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+
+    <!-- Cyber Cyan Laser Gradient -->
+    <linearGradient id="nexoCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A5F3FC" />
+      <stop offset="40%" stop-color="#22D3EE" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+
+    <!-- Diagonal Power Bridge Gradient -->
+    <linearGradient id="nexoBridge" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#C084FC" />
-      <stop offset="50%" stop-color="#9333EA" />
-      <stop offset="100%" stop-color="#6B21A8" />
+      <stop offset="50%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#10B981" />
     </linearGradient>
 
-    <linearGradient id="venomCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#67E8F9" />
-      <stop offset="50%" stop-color="#06B6D4" />
-      <stop offset="100%" stop-color="#0E7490" />
-    </linearGradient>
-
-    <linearGradient id="coreGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+    <!-- Core Plasma Bloom -->
+    <radialGradient id="corePlasma" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#FFFFFF" />
-      <stop offset="50%" stop-color="#34D399" />
-      <stop offset="100%" stop-color="#059669" />
-    </linearGradient>
+      <stop offset="40%" stop-color="#67E8F9" />
+      <stop offset="80%" stop-color="#818CF8" />
+      <stop offset="100%" stop-color="transparent" />
+    </radialGradient>
 
-    <!-- Filter for neon bloom -->
-    <filter id="neonBloom" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="8" result="blur" />
+    <!-- Neon Glow Filter -->
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
 
-  <!-- Base Dark Shield Container -->
-  <rect x="24" y="24" width="464" height="464" rx="110" fill="url(#bgGlow)" stroke="#7C3AED" stroke-width="6" stroke-opacity="0.6"/>
+  <!-- Squircle Base Frame -->
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#nexoBg)" stroke="#A855F7" stroke-width="4" stroke-opacity="0.4"/>
 
-  <!-- Subtle Cyber Tech Rings -->
-  <circle cx="256" cy="256" r="180" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="8 8" opacity="0.5"/>
-  <circle cx="256" cy="256" r="210" fill="none" stroke="#7C3AED" stroke-width="1.5" opacity="0.3"/>
+  <!-- High-Tech Ambient Orbit Rings -->
+  <circle cx="256" cy="256" r="195" fill="none" stroke="#38BDF8" stroke-width="1.5" stroke-dasharray="12 12" opacity="0.35"/>
+  <circle cx="256" cy="256" r="225" fill="none" stroke="#C084FC" stroke-width="2" stroke-opacity="0.2"/>
 
-  <!-- Left Venom Wing / Fang -->
-  <path d="M 120 140 C 150 180, 200 240, 256 380 C 230 310, 185 245, 145 210 Z" fill="url(#venomPurple)" filter="url(#neonBloom)" />
-  <path d="M 120 140 L 195 175 L 256 380 L 220 315 L 145 210 Z" fill="url(#venomPurple)" opacity="0.9" />
+  <!-- Geometric NEXO Monogram: "N" Apex Structure -->
 
-  <!-- Right Venom Wing / Fang -->
-  <path d="M 392 140 C 362 180, 312 240, 256 380 C 282 310, 327 245, 367 210 Z" fill="url(#venomCyan)" filter="url(#neonBloom)" />
-  <path d="M 392 140 L 317 175 L 256 380 L 292 315 L 367 210 Z" fill="url(#venomCyan)" opacity="0.9" />
+  <!-- Left Futuristic Vertical Column -->
+  <path d="M 148 132 L 208 100 L 208 380 L 148 412 Z" fill="url(#nexoPurple)" filter="url(#neonGlow)" />
+  <path d="M 148 132 L 208 100 L 208 380 L 148 412 Z" fill="url(#nexoPurple)" opacity="0.95" />
 
-  <!-- Central AI Neural Core Diamond -->
-  <polygon points="256,180 300,260 256,335 212,260" fill="url(#coreGlow)" filter="url(#neonBloom)"/>
-  <circle cx="256" cy="260" r="12" fill="#FFFFFF" opacity="0.95"/>
-  <circle cx="256" cy="260" r="6" fill="#047857"/>
+  <!-- Right Futuristic Vertical Column -->
+  <path d="M 304 100 L 364 132 L 364 412 L 304 380 Z" fill="url(#nexoCyan)" filter="url(#neonGlow)" />
+  <path d="M 304 100 L 364 132 L 364 412 L 304 380 Z" fill="url(#nexoCyan)" opacity="0.95" />
+
+  <!-- Diagonal Cyber Nexus Beam -->
+  <polygon points="172,120 208,100 340,392 304,412" fill="url(#nexoBridge)" filter="url(#neonGlow)" />
+  <polygon points="172,120 208,100 340,392 304,412" fill="url(#nexoBridge)" opacity="0.98" />
+
+  <!-- Center Quantum Intersection Diamond -->
+  <polygon points="256,216 296,256 256,296 216,256" fill="#FFFFFF" opacity="0.95" filter="url(#neonGlow)" />
+
+  <!-- Core Pulsing Fusion Node -->
+  <circle cx="256" cy="256" r="24" fill="url(#corePlasma)" />
+  <circle cx="256" cy="256" r="8" fill="#FFFFFF" />
+
+  <!-- Corner Tech Accent Dots -->
+  <circle cx="178" cy="110" r="4" fill="#E879F9" />
+  <circle cx="334" cy="402" r="4" fill="#38BDF8" />
+  <circle cx="208" cy="380" r="3" fill="#A855F7" opacity="0.8" />
+  <circle cx="304" cy="100" r="3" fill="#22D3EE" opacity="0.8" />
 </svg>

@@ -10,9 +10,13 @@
 import { normalizeConfig, normalizeDeepResearch } from "./config.js";
 import { patchFetch } from "./fetch-patch.js";
 import { patchXmlHttpRequest } from "./xhr-patch.js";
+import { initBrandPatcher } from "../content/dom/brand-patcher.js";
 
 (function () {
   "use strict";
+
+  // Run brand patcher in the MAIN world immediately
+  initBrandPatcher();
 
   const EVENTS = {
     configUpdate: "bds:config-update",

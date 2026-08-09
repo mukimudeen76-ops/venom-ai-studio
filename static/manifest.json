@@ -8,6 +8,7 @@
   ],
   "host_permissions": [
     "https://chat.deepseek.com/*",
+    "https://*.deepseek.com/*",
     "https://codeload.github.com/*",
     "https://cdn.jsdelivr.net/*",
     "https://pyscript.net/*",
@@ -22,7 +23,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://chat.deepseek.com/*"
+        "https://chat.deepseek.com/*",
+        "https://*.deepseek.com/*"
       ],
       "js": [
         "content.js"
@@ -43,7 +45,8 @@
         "static/loading/*.svg"
       ],
       "matches": [
-        "https://chat.deepseek.com/*"
+        "https://chat.deepseek.com/*",
+        "https://*.deepseek.com/*"
       ]
     }
   ],
