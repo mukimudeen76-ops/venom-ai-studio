@@ -62,7 +62,9 @@ async function createExtensionContext() {
   let context;
   try {
     const launchOptions = {
-      headless: !!process.env.CI,
+      // Playwright Chromium me EXTENSIONS sirf headful me chalti hain (known
+      // limitation) — CI me bhi headful + xvfb-run use hota hai.
+      headless: false,
       viewport: { width: 1440, height: 1100 },
       args: [
         `--disable-extensions-except=${extensionPath}`,

@@ -42,7 +42,8 @@ jobs:
         run: npm run test:unit
 
       - name: Run Playwright suite
-        run: npx playwright test
+        # Extensions headless me nahi chalti — xvfb (virtual display) me headful
+        run: xvfb-run -a npx playwright test
         env:
           CI: "1"
 
@@ -107,7 +108,7 @@ jobs:
         run: npm run build:firefox
 
       - name: Run Firefox E2E suite
-        run: npm run test:e2e:firefox
+        run: xvfb-run -a npm run test:e2e:firefox
         env:
           CI: "1"
           FIREFOX_BIN: ${{ steps.setup-firefox.outputs.firefox-path }}
