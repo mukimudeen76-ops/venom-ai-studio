@@ -551,10 +551,18 @@ class MainActivity : ComponentActivity() {
                     return openExternalUrl(url)
                 }
 
+                override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+                    if (url.isNullOrEmpty()) return
+                    if (url.contains("deepseek.com")) {
+                        injectEarlySanitizer(view)
+                    }
+                }
+
                 override fun onPageFinished(view: WebView, url: String?) {
                     super.onPageFinished(view, url)
                     if (url.isNullOrEmpty()) return
-                    if (url.startsWith("https://chat.deepseek.com")) {
+                    if (url.contains("deepseek.com")) {
                         injectBdsScripts(view)
                     }
                 }
@@ -562,6 +570,16 @@ class MainActivity : ComponentActivity() {
 
     private fun bdsWebChromeClient() =
             object : WebChromeClient() {
+                override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                    super.onProgressChanged(view, newProgress)
+                    if (view != null && newProgress in 15..95) {
+                        val currentUrl = view.url ?: ""
+                        if (currentUrl.contains("deepseek.com")) {
+                            injectEarlySanitizer(view)
+                        }
+                    }
+                }
+
                 override fun onPermissionRequest(request: android.webkit.PermissionRequest?) {
                     request?.grant(request.resources)
                 }
@@ -697,6 +715,52 @@ class MainActivity : ComponentActivity() {
     // ── BDS script injection ─────────────────────────────────────────────
 
     /**
+     * Inject early brand sanitization script at 0ms (onPageStarted / onProgressChanged)
+     * so that login forms, headers, titles and placeholders are cleaned before first paint.
+     */
+    private fun injectEarlySanitizer(view: WebView) {
+        val earlyScript = """
+            (function() {
+                try {
+                    document.title = "Nexo AI";
+                    var brandRegex = /(?:better\s*)?deep\s*seek(?:\.com|\s*ai)?/gi;
+                    function cleanStr(s) { return typeof s === 'string' ? s.replace(brandRegex, "Nexo AI") : s; }
+                    
+                    try {
+                        var pDesc = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'placeholder');
+                        if (pDesc && pDesc.set) {
+                            Object.defineProperty(HTMLInputElement.prototype, 'placeholder', {
+                                get: function() { return pDesc.get.call(this); },
+                                set: function(v) { pDesc.set.call(this, cleanStr(v)); },
+                                configurable: true
+                            });
+                        }
+                    } catch(e) {}
+
+                    function scanNodes(root) {
+                        if (!root) return;
+                        var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+                        var node;
+                        while(node = walker.nextNode()) {
+                            if (node.nodeValue && /deep\s*seek/i.test(node.nodeValue)) {
+                                node.nodeValue = cleanStr(node.nodeValue);
+                            }
+                        }
+                        var inputs = root.querySelectorAll ? root.querySelectorAll('input, textarea, button') : [];
+                        for (var i = 0; i < inputs.length; i++) {
+                            var el = inputs[i];
+                            if (el.placeholder && /deep\s*seek/i.test(el.placeholder)) el.placeholder = cleanStr(el.placeholder);
+                            if (el.title && /deep\s*seek/i.test(el.title)) el.title = cleanStr(el.title);
+                        }
+                    }
+                    if (document.documentElement) scanNodes(document.documentElement);
+                } catch(e) {}
+            })();
+        """.trimIndent()
+        view.evaluateJavascript(earlyScript, null)
+    }
+
+    /**
      * Read the BDS bundle (content.css/js, injected.js) from assets/bds and inject them into the
      * page after every navigation. Order matters:
      * 1. injected.js (MAIN-world equivalent — patches fetch/XHR)
@@ -712,13 +776,15 @@ class MainActivity : ComponentActivity() {
         val bootstrap =
                 """
             (function () {
-                if (window.__bdsAndroidBootstrapped) return;
-                window.__bdsAndroidBootstrapped = true;
                 try {
-                    var style = document.createElement('style');
-                    style.textContent = $cssLiteral;
-                    document.head.appendChild(style);
-                } catch (e) { console.error('[BDS] css inject failed', e); }
+                    var existing = document.getElementById('__nexo_ai_css');
+                    if (!existing) {
+                        var style = document.createElement('style');
+                        style.id = '__nexo_ai_css';
+                        style.textContent = $cssLiteral;
+                        (document.head || document.documentElement).appendChild(style);
+                    }
+                } catch (e) { console.error('[Nexo AI] css inject failed', e); }
             })();
         """.trimIndent()
 
