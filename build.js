@@ -217,11 +217,19 @@ async function run() {
   );
   } // end !isAndroid manifest block
 
-  // Copy sandbox.html to root dist (used by all targets — Android iframes still load it)
-  copyFileSync(
-    resolve(__dirname, "static/sandbox.html"),
-    resolve(distDir, "sandbox.html")
-  );
+  // Copy sandbox.html and index.html to root dist (used by all targets — Android loads index.html directly)
+  if (existsSync(resolve(__dirname, "static/sandbox.html"))) {
+    copyFileSync(
+      resolve(__dirname, "static/sandbox.html"),
+      resolve(distDir, "sandbox.html")
+    );
+  }
+  if (existsSync(resolve(__dirname, "static/index.html"))) {
+    copyFileSync(
+      resolve(__dirname, "static/index.html"),
+      resolve(distDir, "index.html")
+    );
+  }
   
   console.log("\n🧹 Cleaning non-ASCII characters from bundle...");
   try {

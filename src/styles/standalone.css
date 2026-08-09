@@ -1,0 +1,70 @@
+/* ═════════════════════════════════════════════════════════════════════
+   Nexo AI Studio — Cyber Nexus Standalone Design System (Original UI)
+   Masterminded by Tehzeeb (@xtehzeeb.x | xtehzeeb.x7@gmail.com)
+   ═════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --nexo-bg-base: #060913;
+  --nexo-bg-surface: #0E1326;
+  --nexo-bg-elevated: #151C38;
+  --nexo-bg-input: #101730;
+  
+  --nexo-primary: #A855F7;
+  --nexo-primary-glow: rgba(168, 85, 247, 0.2);
+  --nexo-cyan: #06B6D4;
+  --nexo-cyan-glow: rgba(6, 182, 212, 0.2);
+  --nexo-emerald: #10B981;
+  
+  --nexo-border: #1E294B;
+  --nexo-border-hover: #334175;
+  --nexo-border-glow: rgba(6, 182, 212, 0.4);
+  
+  --nexo-text-primary: #F8FAFC;
+  --nexo-text-secondary: #94A3B8;
+  --nexo-text-tertiary: #64748B;
+  
+  --nexo-radius-sm: 8px;
+  --nexo-radius-md: 14px;
+  --nexo-radius-lg: 20px;
+  
+  --nexo-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --nexo-font-mono: "JetBrains Mono", "Fira Code", monospace;
+  
+  --nexo-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(6, 182, 212, 0.08);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--nexo-bg-base);
+  color: var(--nexo-text-primary);
+  font-family: var(--nexo-font-sans);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  position: relative;
+  background: radial-gradient(circle at 50% 0%, #151036 0%, #060913 70%);
+}
+
+/* ── Scrollbars ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--nexo-border);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nexo-primary);
+}
