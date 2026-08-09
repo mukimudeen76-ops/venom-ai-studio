@@ -151,8 +151,15 @@ export function initBrandPatcher() {
   }
 
   // 3. Periodic sweep interval for dynamic SPA frame transitions
+  // PERF: MutationObserver already patches live changes in real-time (targeted,
+  // cheap). Yeh sweep sirf SPA frame edge-cases ke liye belt-and-suspenders hai —
+  // 350ms pe full-DOM recursive walk har 350ms = continuous CPU drain har page pe.
+  // -> 2000ms + hidden-tab skip: same coverage, ~85% kam CPU.
   if (typeof window !== "undefined") {
-    setInterval(runPatch, 350);
+    setInterval(() => {
+      if (document.hidden) return;
+      runPatch();
+    }, 2000);
   }
 
   if (document.readyState === "loading") {
