@@ -1884,6 +1884,18 @@
       </div>
     </div>
 
+    <!-- In-App Privacy Policy & Security Card -->
+    <div style="background: var(--bds-bg-panel); border: 1px solid var(--bds-border); border-radius: 8px; padding: 14px; margin-top: 12px;">
+      <div style="font-size: 12px; font-weight: 600; color: var(--bds-accent); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+        🛡️ Privacy Policy & Security Protocol
+      </div>
+      <div style="font-size: 11px; color: var(--bds-text-secondary); line-height: 1.4; display: flex; flex-direction: column; gap: 4px;">
+        <div>• <b>Zero Telemetry</b>: 100% client-side execution. Zero user data, chats, or code are sent to third parties.</div>
+        <div>• <b>Encrypted Token Vault</b>: Sensitive tokens & API keys are intercepted and stored in local encrypted vault.</div>
+        <div>• <b>Data Sovereignty</b>: Masterminded & Developed by Tehzeeb (<a href="mailto:xtehzeeb.x7@gmail.com" style="color: var(--bds-accent); text-decoration: none;">xtehzeeb.x7@gmail.com</a>).</div>
+      </div>
+    </div>
+
     {#if isSectionMatch('subIntegrations')}
     <button type="button" class="bds-sub-toggle" class:open={subIntegrationsOpen} onclick={() => subIntegrationsOpen = !subIntegrationsOpen} aria-expanded={subIntegrationsOpen}>
       {t('settings.subIntegrations')}

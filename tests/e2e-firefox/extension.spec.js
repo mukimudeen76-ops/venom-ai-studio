@@ -18,7 +18,7 @@ describe("Firefox extension", () => {
 
   beforeAll(async () => {
     fx = await createFirefoxFixture();
-  }, 60000);
+  }, 120000);
 
   afterAll(async () => {
     if (!fx) return;

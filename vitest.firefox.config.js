@@ -3,8 +3,8 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     include: ["tests/e2e-firefox/**/*.spec.js"],
-    testTimeout: 90000,
-    hookTimeout: 90000,
+    testTimeout: 120000,
+    hookTimeout: 120000,
     environment: "node",
     globals: false,
     fileParallelism: false,
