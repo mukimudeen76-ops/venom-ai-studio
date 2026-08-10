@@ -14,7 +14,9 @@
   import SplashIntro from "./SplashIntro.svelte";
   import appState from "../state.js";
 
-  let isStandalone = typeof document !== "undefined" && (Boolean(document.getElementById("app")) || window.location.href.includes("index.html") || !window.location.href.includes("deepseek.com"));
+  // Standalone (studio page with #app / index.html) me drawer khula rehta hai;
+  // extension (deepseek.com pe inject) me band — jsdom tests me bhi band (no #app).
+  let isStandalone = typeof document !== "undefined" && (Boolean(document.getElementById("app")) || window.location.href.includes("index.html")) && !window.location.href.includes("deepseek.com");
   let drawerOpen = $state(isStandalone);
   let apiPlaygroundOpen = $state(false);
   let whatsNewPending = $state(appState.whatsNewPending);
