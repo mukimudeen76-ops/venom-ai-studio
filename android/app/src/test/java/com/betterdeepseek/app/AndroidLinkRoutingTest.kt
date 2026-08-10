@@ -34,25 +34,17 @@ class AndroidLinkRoutingTest {
     }
 
     @Test
-    fun `Google OAuth hosts stay inside the WebView`() {
-        assertFalse(shouldOpenExternally(Uri.parse("https://google.com/")))
-        assertFalse(shouldOpenExternally(Uri.parse("https://www.google.com/gsi/select")))
-        assertFalse(shouldOpenExternally(Uri.parse("https://myaccount.google.com/")))
-        assertFalse(shouldOpenExternally(Uri.parse("https://accounts.google.com/o/oauth2/v2/auth")))
-        assertFalse(shouldOpenExternally(Uri.parse("https://login.accounts.google.com/path")))
-        assertFalse(shouldOpenExternally(Uri.parse("https://accounts.youtube.com/accounts/SetSID")))
-        assertFalse(shouldOpenExternally(Uri.parse("https://lh3.googleusercontent.com/a/x")))
+    fun `Google hosts now open externally (Google login removed)`() {
+        // Google login feature removed — koi Google auth host in-app nahi rakhte.
+        assertTrue(shouldOpenExternally(Uri.parse("https://google.com/")))
+        assertTrue(shouldOpenExternally(Uri.parse("https://www.google.com/gsi/select")))
+        assertTrue(shouldOpenExternally(Uri.parse("https://myaccount.google.com/")))
+        assertTrue(shouldOpenExternally(Uri.parse("https://accounts.google.com/o/oauth2/v2/auth")))
+        assertTrue(shouldOpenExternally(Uri.parse("https://login.accounts.google.com/path")))
+        assertTrue(shouldOpenExternally(Uri.parse("https://accounts.youtube.com/accounts/SetSID")))
+        assertTrue(shouldOpenExternally(Uri.parse("https://lh3.googleusercontent.com/a/x")))
         assertTrue(shouldOpenExternally(Uri.parse("https://www.googleapis.com/oauth2/v3/certs")))
         assertTrue(shouldOpenExternally(Uri.parse("https://oauthaccountmanager.googleapis.com/")))
-    }
-
-    @Test
-    fun `isGoogleAuthHost matches identity hosts only`() {
-        assertTrue(isGoogleAuthHost("accounts.google.com"))
-        assertTrue(isGoogleAuthHost("www.google.com"))
-        assertTrue(isGoogleAuthHost("lh3.googleusercontent.com"))
-        assertFalse(isGoogleAuthHost("www.googleapis.com"))
-        assertFalse(isGoogleAuthHost("github.com"))
     }
 
     @Test
