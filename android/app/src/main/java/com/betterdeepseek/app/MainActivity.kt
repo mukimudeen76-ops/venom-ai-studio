@@ -53,18 +53,8 @@ internal fun shouldOpenExternally(url: Uri, assetHost: String = "bds-asset.local
     if (host == assetHost.lowercase()) return false
     if (host == "deepseek.com" || host.endsWith(".deepseek.com")) return false
     if (host == "hcaptcha.com" || host.endsWith(".hcaptcha.com")) return false
-    if (isGoogleAuthHost(host)) return false
 
     return true
-}
-
-internal fun isGoogleAuthHost(host: String): Boolean {
-    val h = host.lowercase()
-    return h == "google.com" ||
-            h.endsWith(".google.com") ||
-            h == "accounts.youtube.com" ||
-            h == "googleusercontent.com" ||
-            h.endsWith(".googleusercontent.com")
 }
 
 internal fun shouldCapturePopupInApp(url: Uri, assetHost: String = "bds-asset.local"): Boolean {
@@ -74,11 +64,9 @@ internal fun shouldCapturePopupInApp(url: Uri, assetHost: String = "bds-asset.lo
 /**
  * Decide whether a top-level navigation should be handed to the external browser.
  *
- * Only deliberate user-gesture navigations leave the app. OAuth redirect chains bounce through
- * Google consent / ccTLD hosts that are not on the in-app allow list via 302 and JS redirects,
- * none of which carry a gesture. Routing those to an external browser drops the WebView session
- * cookies, so Google returns "400 malformed request". Keeping non-gesture navigations in-app
- * lets the whole sign-in flow complete inside the WebView session.
+ * Only deliberate user-gesture navigations leave the app. Non-gesture redirect hops
+ * (e.g. auth chains) stay in-app so the WebView session cookies survive; gesture
+ * navigations to external hosts open in the default browser.
  */
 internal fun shouldOpenRequestExternally(
         request: WebResourceRequest,
@@ -220,6 +208,8 @@ private val CHROME_VERSION_REGEX = Regex("""\bChrome/(\d+(?:\.\d+)*)""")
 class MainActivity : ComponentActivity() {
 
     private lateinit var webView: WebView
+    @Volatile private var pageLoaded = false
+    @Volatile private var reloadedOnce = false
     private lateinit var rootLayout: FrameLayout
     private lateinit var assetLoader: WebViewAssetLoader
     private lateinit var bridge: WebViewBridge
@@ -406,6 +396,14 @@ class MainActivity : ComponentActivity() {
         }
         webView.loadUrl(getString(R.string.bds_target_url))
 
+        // BLACK-SCREEN WATCHDOG: agar 12s me page load na ho (asset 404, JS error)
+        // to native retry screen dikhao — app kabhi blank/black na rahe.
+        webView.postDelayed({
+            if (!pageLoaded && !isFinishing && !isDestroyed) {
+                showNativeRetry("Page load timeout — bundle assets check karo.")
+            }
+        }, 12000)
+
         onBackPressedDispatcher.addCallback(
                 this,
                 object : OnBackPressedCallback(true) {
@@ -563,12 +561,73 @@ class MainActivity : ComponentActivity() {
 
                 override fun onPageFinished(view: WebView, url: String?) {
                     super.onPageFinished(view, url)
+                    pageLoaded = true
                     if (url.isNullOrEmpty()) return
                     if (url.contains("deepseek.com")) {
                         injectBdsScripts(view)
                     }
                 }
+
+                override fun onReceivedError(
+                        view: WebView,
+                        request: WebResourceRequest,
+                        error: WebResourceError
+                ) {
+                    super.onReceivedError(view, request, error)
+                    if (request.isForMainFrame) {
+                        if (!reloadedOnce) {
+                            reloadedOnce = true
+                            view.postDelayed({ view.reload() }, 800)
+                        } else {
+                            showNativeRetry("Load error: ${error.description}")
+                        }
+                    }
+                }
             }
+
+    /** BLACK-SCREEN FIX: native retry screen (programmatic — no XML needed). */
+    private fun showNativeRetry(reason: String) {
+        try {
+            runOnUiThread {
+                if (isFinishing || isDestroyed) return@runOnUiThread
+                val container = android.widget.LinearLayout(this).apply {
+                    orientation = android.widget.LinearLayout.VERTICAL
+                    gravity = android.view.Gravity.CENTER
+                    setBackgroundColor(android.graphics.Color.parseColor("#04060B"))
+                }
+                val title = android.widget.TextView(this).apply {
+                    text = "Nexo AI"
+                    setTextColor(android.graphics.Color.parseColor("#22D3EE"))
+                    textSize = 26f
+                    typeface = android.graphics.Typeface.DEFAULT_BOLD
+                    gravity = android.view.Gravity.CENTER
+                }
+                val msg = android.widget.TextView(this).apply {
+                    text = "App load nahi ho paya.\n$reason"
+                    setTextColor(android.graphics.Color.parseColor("#94A3B8"))
+                    textSize = 14f
+                    gravity = android.view.Gravity.CENTER
+                    setPadding(0, 16, 0, 24)
+                }
+                val btn = android.widget.Button(this).apply {
+                    text = "Retry"
+                    setTextColor(android.graphics.Color.WHITE)
+                    setBackgroundColor(android.graphics.Color.parseColor("#7C3AED"))
+                }
+                btn.setOnClickListener {
+                    setContentView(rootLayout)
+                    pageLoaded = false
+                    webView.reload()
+                }
+                container.addView(title)
+                container.addView(msg)
+                container.addView(btn)
+                setContentView(container)
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "showNativeRetry error", e)
+        }
+    }
 
     private fun bdsWebChromeClient() =
             object : WebChromeClient() {

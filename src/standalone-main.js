@@ -15,6 +15,10 @@ import "./styles/standalone.css";
 import { mountUi } from "./content/ui/mount.js";
 import { loadStateFromStorage } from "./content/storage.js";
 import appState from "./content/state.js";
+// BYOK multi-provider engine — bundle me ship (keys kabhi embed nahi, user apni
+// daalta hai Settings > AI Providers)
+import { PROVIDERS, streamChatCompletion } from "./lib/api/ai-client.js";
+export { PROVIDERS, streamChatCompletion };
 
 async function bootStandaloneStudio() {
   console.log("⚡ [Nexo AI] Booting Standalone Studio Engine...");

@@ -70,6 +70,38 @@ export const PROVIDERS = {
       { id: "openai/gpt-4o", name: "GPT-4o via OpenRouter", context: 128000 },
       { id: "meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3 70B Instruct", context: 128000 }
     ]
+  },
+  groq: {
+    id: "groq",
+    name: "Groq (Fast LPU Inference)",
+    endpoint: "https://api.groq.com/openai/v1/chat/completions",
+    getKeyUrl: "https://console.groq.com/keys",
+    defaultModel: "llama-3.3-70b-versatile",
+    models: [
+      { id: "llama-3.3-70b-versatile", name: "Llama 3.3 70B Versatile", context: 128000 },
+      { id: "llama-3.1-8b-instant", name: "Llama 3.1 8B Instant (Ultra Fast)", context: 128000 },
+      { id: "mixtral-8x7b-32768", name: "Mixtral 8x7B (32K)", context: 32768 }
+    ]
+  },
+  apilayer: {
+    id: "apilayer",
+    name: "APILayer (Unified Gateway)",
+    endpoint: "https://api.apilayer.com/chat/completions",
+    getKeyUrl: "https://apilayer.com/marketplace",
+    defaultModel: "gpt-4o-mini",
+    models: [
+      { id: "gpt-4o-mini", name: "GPT-4o Mini via APILayer", context: 128000 },
+      { id: "claude-3-5-sonnet", name: "Claude 3.5 Sonnet via APILayer", context: 200000 },
+      { id: "deepseek-chat", name: "DeepSeek V3 via APILayer", context: 64000 }
+    ]
+  },
+  custom: {
+    id: "custom",
+    name: "Custom Endpoint (OpenAI-compatible)",
+    endpoint: "",
+    getKeyUrl: "",
+    defaultModel: "",
+    models: []
   }
 };
 
@@ -94,6 +126,7 @@ export async function streamChatCompletion({
   systemPrompt = "",
   onChunk = () => {},
   signal = null,
+  customEndpoint = "", // Custom provider: user-defined OpenAI-compatible base URL
 }) {
   if (!apiKey || typeof apiKey !== "string" || apiKey.trim() === "") {
     throw new Error(`API Key is required for provider "${provider}". Please configure your key in Settings.`);
@@ -102,6 +135,16 @@ export async function streamChatCompletion({
   const selectedProvider = PROVIDERS[provider] || PROVIDERS.deepseek;
   const targetModel = model || selectedProvider.defaultModel;
   const cleanKey = apiKey.trim();
+
+  // Custom provider: override endpoint with user-supplied URL
+  if (provider === "custom") {
+    if (!customEndpoint || customEndpoint.trim() === "") {
+      throw new Error("Custom provider ke liye endpoint URL daalo (Settings > AI Providers > Custom Endpoint).");
+    }
+    const base = customEndpoint.trim().replace(/\/+$/, "");
+    selectedProvider.endpoint = base.endsWith("/chat/completions") ? base : `${base}/chat/completions`;
+    selectedProvider.defaultModel = targetModel || "gpt-4o-mini";
+  }
 
   // ── Anthropic Messages API Format ──
   if (provider === "anthropic") {

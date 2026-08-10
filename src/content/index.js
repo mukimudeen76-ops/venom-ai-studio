@@ -35,6 +35,8 @@ import { i18n } from "../lib/i18n.svelte.js";
 import { remoteConfig, REMOTE_CONFIG_EVENT, detectModelType } from "../lib/remote-config.svelte.js";
 import { STORAGE_KEYS, CSS_PRESETS } from "../lib/constants.js";
 import { loadAllHistory, retainOnlyHistorySession } from "./load-all-history.js";
+// BYOK multi-provider engine — runtime available (keys user apni daalta hai, repo me kabhi nahi)
+import { PROVIDERS as NEXO_PROVIDERS, streamChatCompletion as nexoStreamChat } from "../lib/api/ai-client.js";
 
 const CONTENT_BOOTSTRAP_KEY = "__bdsContentBootstrapped";
 
@@ -47,6 +49,11 @@ if (!window[CONTENT_BOOTSTRAP_KEY]) {
     console.error("[Nexo AI] Init error:", error);
   });
 }
+
+// BYOK client exposed for runtime use by any chat path (keys local-only)
+try {
+  window.__NEXO_AI = { PROVIDERS: NEXO_PROVIDERS, streamChatCompletion: nexoStreamChat };
+} catch (e) { /* ignore */ }
 
 async function init() {
   await waitForBody();

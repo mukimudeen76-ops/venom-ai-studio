@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="apexGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#818CF8" />
+      <stop offset="100%" stop-color="#C084FC" />
+    </linearGradient>
+    <linearGradient id="apexGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    .apex-spin-arc {
+      animation: spinLinear 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 100px 100px;
+    }
+    .apex-spin-rev {
+      animation: spinRev 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 100px 100px;
+    }
+    .apex-core {
+      animation: corePulse 1.2s ease-in-out infinite alternate;
+      transform-origin: 100px 100px;
+    }
+
+    @keyframes spinLinear {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spinRev {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes corePulse {
+      0% { transform: scale(0.88); opacity: 0.7; }
+      100% { transform: scale(1.12); opacity: 1; }
+    }
+  </style>
+
+  <!-- Outer Track -->
+  <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="3" />
+
+  <!-- Animated Outer Glow Arc -->
+  <g class="apex-spin-arc">
+    <circle cx="100" cy="100" r="70" fill="none" stroke="url(#apexGrad1)" stroke-width="4" stroke-linecap="round" stroke-dasharray="120 220" />
+    <circle cx="100" cy="30" r="4.5" fill="#38BDF8" />
+  </g>
+
+  <!-- Inner Counter-Spinning Arc -->
+  <g class="apex-spin-rev">
+    <circle cx="100" cy="100" r="50" fill="none" stroke="url(#apexGrad2)" stroke-width="3" stroke-linecap="round" stroke-dasharray="70 180" />
+    <circle cx="100" cy="50" r="3.5" fill="#34D399" />
+  </g>
+
+  <!-- Center Floating Node -->
+  <g class="apex-core">
+    <circle cx="100" cy="100" r="14" fill="#0F172A" stroke="url(#apexGrad1)" stroke-width="2" />
+    <polygon points="100,92 108,100 100,108 92,100" fill="#FFFFFF" />
+  </g>
+</svg>

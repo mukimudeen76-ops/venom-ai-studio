@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="apexGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    .apex-flow-1 {
+      animation: flowSpin 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      transform-origin: 100px 100px;
+    }
+    .apex-flow-2 {
+      animation: flowSpin 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.4s;
+      transform-origin: 100px 100px;
+    }
+
+    @keyframes flowSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+
+  <g class="apex-flow-1">
+    <ellipse cx="100" cy="100" rx="65" ry="30" fill="none" stroke="url(#apexGrad4)" stroke-width="3" stroke-dasharray="80 20" stroke-linecap="round" />
+  </g>
+
+  <g class="apex-flow-2">
+    <ellipse cx="100" cy="100" rx="30" ry="65" fill="none" stroke="#34D399" stroke-width="2.5" stroke-dasharray="60 30" stroke-linecap="round" />
+  </g>
+
+  <circle cx="100" cy="100" r="10" fill="#1E1B4B" stroke="#38BDF8" stroke-width="2" />
+  <circle cx="100" cy="100" r="3" fill="#FFFFFF" />
+</svg>

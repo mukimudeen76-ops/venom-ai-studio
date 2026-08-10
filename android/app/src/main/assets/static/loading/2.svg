@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="apexLaser" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A855F7" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    .pulse-ring-1 {
+      animation: pulseGrow 2s ease-out infinite;
+      transform-origin: 100px 100px;
+    }
+    .pulse-ring-2 {
+      animation: pulseGrow 2s ease-out infinite 0.7s;
+      transform-origin: 100px 100px;
+    }
+    .orbit-dot-1 {
+      animation: dotOrbit 2s linear infinite;
+      transform-origin: 100px 100px;
+    }
+
+    @keyframes pulseGrow {
+      0% { transform: scale(0.3); opacity: 1; }
+      100% { transform: scale(1.3); opacity: 0; }
+    }
+    @keyframes dotOrbit {
+      0% { transform: rotate(0deg) translateX(45px) rotate(0deg); }
+      100% { transform: rotate(360deg) translateX(45px) rotate(-360deg); }
+    }
+  </style>
+
+  <!-- Glowing Ripples -->
+  <circle class="pulse-ring-1" cx="100" cy="100" r="45" fill="none" stroke="url(#apexLaser)" stroke-width="2.5" />
+  <circle class="pulse-ring-2" cx="100" cy="100" r="45" fill="none" stroke="#38BDF8" stroke-width="2" />
+
+  <!-- Orbiting Node -->
+  <circle class="orbit-dot-1" cx="100" cy="100" r="4.5" fill="#38BDF8" />
+
+  <!-- Center Core -->
+  <circle cx="100" cy="100" r="16" fill="#111827" stroke="#A855F7" stroke-width="2" />
+  <circle cx="100" cy="100" r="7" fill="#34D399" />
+  <circle cx="100" cy="100" r="2.5" fill="#FFFFFF" />
+</svg>

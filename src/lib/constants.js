@@ -807,6 +807,19 @@ export const DEFAULT_SETTINGS = {
   autoDownloadFiles: false,
   autoDownloadLongWorkZip: false,
   githubToken: "",
+  // BYOK — multi-provider API keys (user's own keys, stored locally, never in repo)
+  apiKeys: {
+    deepseek: "",
+    openai: "",
+    anthropic: "",
+    gemini: "",
+    openrouter: "",
+    groq: "",
+    apilayer: "",
+    custom: ""
+  },
+  selectedProvider: "deepseek",
+  customEndpoint: "",
   voiceMode: false,
   voiceLanguage: (typeof navigator !== 'undefined' ? navigator.language : 'en-US'),
   autoSubmitVoice: true,

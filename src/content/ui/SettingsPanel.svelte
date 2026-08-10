@@ -45,6 +45,33 @@
   let preferredLang = $state(appState.settings.preferredLang || "");
   let githubToken = $state(appState.settings.githubToken || "");
   let showGithubToken = $state(shouldShowGithubTokenByDefault(appState.settings.githubToken));
+
+  // ── BYOK: multi-provider API keys (secure, local-only) ──
+  const PROVIDER_META = [
+    { id: "deepseek", label: "DeepSeek", placeholder: "sk-..." },
+    { id: "openai", label: "OpenAI", placeholder: "sk-..." },
+    { id: "anthropic", label: "Anthropic Claude", placeholder: "sk-ant-..." },
+    { id: "gemini", label: "Google Gemini", placeholder: "AIza..." },
+    { id: "openrouter", label: "OpenRouter", placeholder: "sk-or-..." },
+    { id: "groq", label: "Groq", placeholder: "gsk_..." },
+    { id: "apilayer", label: "APILayer", placeholder: "apikey..." },
+    { id: "custom", label: "Custom Endpoint", placeholder: "api key" },
+  ];
+  let providerKeys = $state({
+    deepseek: String((appState.settings.apiKeys && appState.settings.apiKeys.deepseek) || ""),
+    openai: String((appState.settings.apiKeys && appState.settings.apiKeys.openai) || ""),
+    anthropic: String((appState.settings.apiKeys && appState.settings.apiKeys.anthropic) || ""),
+    gemini: String((appState.settings.apiKeys && appState.settings.apiKeys.gemini) || ""),
+    openrouter: String((appState.settings.apiKeys && appState.settings.apiKeys.openrouter) || ""),
+    groq: String((appState.settings.apiKeys && appState.settings.apiKeys.groq) || ""),
+    apilayer: String((appState.settings.apiKeys && appState.settings.apiKeys.apilayer) || ""),
+    custom: String((appState.settings.apiKeys && appState.settings.apiKeys.custom) || ""),
+  });
+  let selectedProvider = $state(String(appState.settings.selectedProvider || "deepseek"));
+  let customEndpoint = $state(String(appState.settings.customEndpoint || ""));
+  let showProviderKeys = $state(
+    Object.values(providerKeys).some((k) => k && k.length > 0),
+  );
   let disableSystemPrompt = $state(
     Boolean(appState.settings.disableSystemPrompt),
   );
@@ -669,6 +696,20 @@
     preferredLang = appState.settings.preferredLang || "";
     githubToken = appState.settings.githubToken || "";
     showGithubToken = shouldShowGithubTokenByDefault(githubToken);
+    const ak = appState.settings.apiKeys || {};
+    providerKeys = {
+      deepseek: String(ak.deepseek || ""),
+      openai: String(ak.openai || ""),
+      anthropic: String(ak.anthropic || ""),
+      gemini: String(ak.gemini || ""),
+      openrouter: String(ak.openrouter || ""),
+      groq: String(ak.groq || ""),
+      apilayer: String(ak.apilayer || ""),
+      custom: String(ak.custom || ""),
+    };
+    selectedProvider = String(appState.settings.selectedProvider || "deepseek");
+    customEndpoint = String(appState.settings.customEndpoint || "");
+    showProviderKeys = Object.values(providerKeys).some((k) => k && k.length > 0);
     disableSystemPrompt = Boolean(appState.settings.disableSystemPrompt);
     systemPromptInjectionFrequency =
       appState.settings.systemPromptInjectionFrequency || "first";
@@ -928,6 +969,11 @@
     appState.settings.customCSS = customCSS;
     appState.settings.disableTipBox = disableTipBox;
     appState.settings.mcpInlineMaxChars = Math.max(500, Math.min(100000, Math.round(Number(mcpInlineMaxChars) || 8000)));
+
+    // BYOK: multi-provider keys — sirf local storage, kabhi codebase/repo me nahi
+    appState.settings.apiKeys = { ...(appState.settings.apiKeys || {}), ...providerKeys };
+    appState.settings.selectedProvider = selectedProvider;
+    appState.settings.customEndpoint = customEndpoint.trim();
 
     await chrome.storage.local.set({
       [STORAGE_KEYS.settings]: JSON.parse(JSON.stringify(appState.settings)),
@@ -1931,6 +1977,56 @@
           <p class="bds-token-help">
             {t('settings.githubTokenHelp')}
           </p>
+        </div>
+
+        <!-- ── BYOK: AI Providers (secure multi-provider API keys) ── -->
+        <div class="bds-toggle-row bds-providers-row" style="flex-direction: column; align-items: stretch; gap: 8px; border: 1px solid rgba(139,92,246,0.35); border-radius: 10px; padding: 10px; background: rgba(139,92,246,0.06);">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <span class="bds-toggle-label" style="font-weight:700; color:#C084FC;">🤖 AI Providers — Bring Your Own Key</span>
+            <button type="button" class="bds-btn-outlined bds-token-btn" onclick={() => (showProviderKeys = !showProviderKeys)}>
+              {showProviderKeys ? 'Hide Keys' : 'Show Keys'}
+            </button>
+          </div>
+          <p style="font-size:11px; color:rgba(255,255,255,0.5); margin:0;">
+            Apni API keys daalo — yeh <b>sirf aapke device/local storage me</b> save hoti hain, kabhi codebase ya GitHub pe nahi jaati.
+          </p>
+
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <label style="font-size:12px; color:rgba(255,255,255,0.7);">Active Provider:</label>
+            <select class="bds-input" bind:value={selectedProvider} style="flex:1; min-width:140px;">
+              {#each PROVIDER_META as pr}
+                <option value={pr.id}>{pr.label}</option>
+              {/each}
+            </select>
+          </div>
+
+          {#if selectedProvider === "custom"}
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <label style="font-size:12px; color:rgba(255,255,255,0.7);">Custom Endpoint URL (OpenAI-compatible)</label>
+              <input type="url" class="bds-input" bind:value={customEndpoint} placeholder="https://your-gateway.example.com/v1" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%; box-sizing:border-box;" />
+            </div>
+          {/if}
+
+          {#each PROVIDER_META as pr}
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <label style="font-size:12px; color:rgba(255,255,255,0.7);">{pr.label} API Key</label>
+              <input
+                type={showProviderKeys ? "text" : "password"}
+                class="bds-input"
+                value={providerKeys[pr.id]}
+                oninput={(e) => { providerKeys[pr.id] = e.currentTarget.value; }}
+                placeholder={pr.placeholder}
+                autocomplete="off" autocapitalize="off" spellcheck="false"
+                style="width:100%; box-sizing:border-box;"
+              />
+            </div>
+          {/each}
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="bds-btn-outlined bds-token-btn" onclick={() => { Object.keys(providerKeys).forEach((k) => { providerKeys[k] = ""; }); customEndpoint = ""; }}>
+              Clear All Keys
+            </button>
+          </div>
         </div>
 
         <div class="bds-toggle-row">

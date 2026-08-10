@@ -1,48 +1,80 @@
 {
-  "manifest_version": 3,
-  "name": "Nexo AI",
-  "version": "1.0.0",
-  "description": "Nexo AI - The Premier Autonomous Multi-AI Engineering & Security Studio masterminded by Tehzeeb (@xtehzeeb.x).",
-  "permissions": [
-    "storage"
-  ],
-  "host_permissions": [
-    "https://api.deepseek.com/*",
-    "https://api.openai.com/*",
-    "https://api.anthropic.com/*",
-    "https://openrouter.ai/*",
-    "https://generativelanguage.googleapis.com/*",
-    "https://api.github.com/*",
-    "https://cdn.jsdelivr.net/*",
-    "https://pyscript.net/*",
-    "<all_urls>"
-  ],
-  "icons": {
-    "16": "static/icons/icon-16.png",
-    "32": "static/icons/icon-32.png",
-    "48": "static/icons/icon-48.png",
-    "128": "static/icons/icon-128.png"
+ "manifest_version": 3,
+ "name": "Nexo AI",
+ "version": "1.0.0",
+ "description": "Nexo AI - The Premier Autonomous Multi-AI Engineering & Security Studio masterminded by Tehzeeb (@xtehzeeb.x).",
+ "permissions": [
+  "storage"
+ ],
+ "host_permissions": [
+  "https://api.deepseek.com/*",
+  "https://api.openai.com/*",
+  "https://api.anthropic.com/*",
+  "https://openrouter.ai/*",
+  "https://generativelanguage.googleapis.com/*",
+  "https://api.github.com/*",
+  "https://cdn.jsdelivr.net/*",
+  "https://pyscript.net/*",
+  "<all_urls>"
+ ],
+ "icons": {
+  "16": "static/icons/icon-16.png",
+  "32": "static/icons/icon-32.png",
+  "48": "static/icons/icon-48.png",
+  "128": "static/icons/icon-128.png"
+ },
+ "action": {
+  "default_title": "Nexo AI Studio",
+  "default_icon": {
+   "16": "static/icons/icon-16.png",
+   "32": "static/icons/icon-32.png",
+   "48": "static/icons/icon-48.png",
+   "128": "static/icons/icon-128.png"
   },
-  "action": {
-    "default_title": "Nexo AI Studio",
-    "default_icon": {
-      "16": "static/icons/icon-16.png",
-      "32": "static/icons/icon-32.png",
-      "48": "static/icons/icon-48.png",
-      "128": "static/icons/icon-128.png"
-    },
-    "default_popup": "index.html"
-  },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "sandbox": {
-    "pages": [
-      "sandbox.html"
-    ]
-  },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'",
-    "sandbox": "sandbox allow-scripts allow-forms allow-popups; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; object-src 'self'"
+  "default_popup": "index.html"
+ },
+ "background": {
+  "service_worker": "background.js"
+ },
+ "sandbox": {
+  "pages": [
+   "sandbox.html"
+  ]
+ },
+ "content_security_policy": {
+  "extension_pages": "script-src 'self'; object-src 'self'",
+  "sandbox": "sandbox allow-scripts allow-forms allow-popups; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; object-src 'self'"
+ },
+ "content_scripts": [
+  {
+   "matches": [
+    "https://chat.deepseek.com/*",
+    "https://*.deepseek.com/*"
+   ],
+   "js": [
+    "content.js"
+   ],
+   "css": [
+    "content.css"
+   ],
+   "run_at": "document_start"
   }
+ ],
+ "web_accessible_resources": [
+  {
+   "resources": [
+    "injected.js",
+    "sandbox.html",
+    "sandbox.js",
+    "static/icons/*",
+    "static/loading/*.svg",
+    "index.html"
+   ],
+   "matches": [
+    "https://chat.deepseek.com/*",
+    "https://*.deepseek.com/*",
+    "<all_urls>"
+   ]
+  }
+ ]
 }
