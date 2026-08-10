@@ -60,9 +60,10 @@ class AndroidLinkRoutingTest {
 
     @Test
     fun `popup capture follows internal routing allowlist`() {
-        assertTrue(shouldCapturePopupInApp(Uri.parse("https://accounts.google.com/o/oauth2/v2/auth")))
-        assertTrue(shouldCapturePopupInApp(Uri.parse("https://www.google.com/gsi/select")))
-        assertTrue(shouldCapturePopupInApp(Uri.parse("https://lh3.googleusercontent.com/a/x")))
+        // Google login removed — Google auth popups ab in-app capture nahi hote
+        assertFalse(shouldCapturePopupInApp(Uri.parse("https://accounts.google.com/o/oauth2/v2/auth")))
+        assertFalse(shouldCapturePopupInApp(Uri.parse("https://www.google.com/gsi/select")))
+        assertFalse(shouldCapturePopupInApp(Uri.parse("https://lh3.googleusercontent.com/a/x")))
         assertTrue(shouldCapturePopupInApp(Uri.parse("https://chat.deepseek.com/sign_in")))
         assertTrue(
                 shouldCapturePopupInApp(
