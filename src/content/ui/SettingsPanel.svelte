@@ -48,7 +48,7 @@
 
   // ── BYOK: multi-provider API keys (secure, local-only) ──
   const PROVIDER_META = [
-    { id: "deepseek", label: "DeepSeek", placeholder: "sk-..." },
+    { id: "deepseek", label: "DeepSeek API (self-hosted key)", placeholder: "sk-..." },
     { id: "openai", label: "OpenAI", placeholder: "sk-..." },
     { id: "anthropic", label: "Anthropic Claude", placeholder: "sk-ant-..." },
     { id: "gemini", label: "Google Gemini", placeholder: "AIza..." },

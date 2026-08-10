@@ -71,7 +71,7 @@ describe("App toggle button", () => {
 
     const fullSpan = target.querySelector("#bds-toggle .bds-toggle-full");
     expect(fullSpan).not.toBeNull();
-    expect(fullSpan.textContent).toBe("BDS");
+    expect(fullSpan.textContent).toBe("NEXO");
     expect(fullSpan.getAttribute("aria-hidden")).toBe("true");
 
     cleanup();

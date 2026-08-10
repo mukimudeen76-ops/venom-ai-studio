@@ -165,7 +165,7 @@
     bind:this={iframe} 
     src={sandboxUrl} 
     style="display: none;" 
-    title="BDS Excel Sandbox"
+    title="Nexo Excel Sandbox"
   ></iframe>
 </article>
 {/if}

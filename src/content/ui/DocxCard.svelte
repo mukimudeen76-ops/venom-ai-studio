@@ -166,7 +166,7 @@
     bind:this={iframe} 
     src={sandboxUrl} 
     style="display: none;" 
-    title="BDS Docx Sandbox"
+    title="Nexo Docx Sandbox"
   ></iframe>
 </article>
 {/if}

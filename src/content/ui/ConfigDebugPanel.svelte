@@ -98,7 +98,7 @@
 {#if visible}
 <div class="bds-cdpanel">
   <div class="bds-cdpanel-header">
-    <span class="bds-cdpanel-title">BDS Config Debug</span>
+    <span class="bds-cdpanel-title">Nexo Config Debug</span>
     <button class="bds-cdpanel-close" onclick={() => (visible = false)}>×</button>
   </div>
 

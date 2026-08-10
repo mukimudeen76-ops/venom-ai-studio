@@ -140,7 +140,7 @@
     bind:this={iframe} 
     srcdoc={headlessSrcDoc} 
     style="display: none;" 
-    title="BDS Auto Code Runner Sandbox"
+    title="Nexo Auto Code Runner Sandbox"
   ></iframe>
 </article>
 

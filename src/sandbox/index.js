@@ -29,6 +29,20 @@ const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 window.addEventListener("message", async (event) => {
   const { type, code, id } = event.data;
 
+  // ── TERMINAL: user-defined JS commands (sandbox me safe eval) ──
+  if (type === "TERMINAL") {
+    try {
+      const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+      const func = new AsyncFunction(`"use strict";\nreturn (async () => {\n${code}\n})();`);
+      const result = await func();
+      const out = typeof result === "undefined" ? "OK" : typeof result === "string" ? result : JSON.stringify(result, null, 2);
+      window.parent.postMessage({ type: "TERMINAL_RESULT", output: String(out), id }, "*");
+    } catch (err) {
+      window.parent.postMessage({ type: "TERMINAL_ERROR", error: err && err.message ? err.message : String(err), id }, "*");
+    }
+    return;
+  }
+
   if (type === "GEN_PPTX") {
     console.log("BDS Sandbox: Received PPTX generation request", id);
     try {

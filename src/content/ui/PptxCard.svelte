@@ -162,7 +162,7 @@
     bind:this={iframe} 
     src={sandboxUrl} 
     style="display: none;" 
-    title="BDS PPTX Sandbox"
+    title="Nexo PPTX Sandbox"
   ></iframe>
 </article>
 {/if}

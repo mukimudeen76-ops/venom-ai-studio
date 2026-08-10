@@ -13,6 +13,7 @@
   import LiveVoiceOverlay from "./LiveVoiceOverlay.svelte";
   import SplashIntro from "./SplashIntro.svelte";
   import appState from "../state.js";
+  import StandaloneChat from "./StandaloneChat.svelte";
 
   // Standalone (studio page with #app / index.html) me drawer khula rehta hai;
   // extension (deepseek.com pe inject) me band — jsdom tests me bhi band (no #app).
@@ -136,12 +137,22 @@
   });
 </script>
 
+{#if isStandalone}
+  <div style="height:100vh; width:100vw; position:relative; background:#04060B;">
+    <div style="position:absolute; top:12px; right:12px; z-index:50; display:flex; gap:8px;">
+      <button type="button" onclick={() => (drawerOpen = true)} style="padding:8px 14px;border-radius:10px;border:1px solid rgba(139,92,246,0.5);background:rgba(124,58,237,0.15);color:#C084FC;font-size:12px;font-weight:700;cursor:pointer;">⚙️ Settings & Keys</button>
+    </div>
+    <StandaloneChat />
+    <Drawer bind:this={drawerRef} open={drawerOpen} onclose={closeDrawer} onopenapiplayground={openApiPlayground} />
+  </div>
+{:else}
 <button id="bds-toggle" type="button" onclick={toggleDrawer} aria-label="Nexo AI">
-  <span class="bds-toggle-full" aria-hidden="true">BDS</span>
+  <span class="bds-toggle-full" aria-hidden="true">NEXO</span>
   <span class="bds-toggle-short" aria-hidden="true">B</span>
 </button>
 
 <Drawer bind:this={drawerRef} open={drawerOpen} onclose={closeDrawer} onopenapiplayground={openApiPlayground} />
+{/if}
 
 {#if apiPlaygroundOpen}
   <ApiPlayground onclose={closeApiPlayground} />

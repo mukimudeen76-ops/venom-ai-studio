@@ -45,21 +45,6 @@
   "extension_pages": "script-src 'self'; object-src 'self'",
   "sandbox": "sandbox allow-scripts allow-forms allow-popups; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; object-src 'self'"
  },
- "content_scripts": [
-  {
-   "matches": [
-    "https://chat.deepseek.com/*",
-    "https://*.deepseek.com/*"
-   ],
-   "js": [
-    "content.js"
-   ],
-   "css": [
-    "content.css"
-   ],
-   "run_at": "document_start"
-  }
- ],
  "web_accessible_resources": [
   {
    "resources": [
@@ -75,6 +60,21 @@
     "https://*.deepseek.com/*",
     "<all_urls>"
    ]
+  }
+ ],
+ "content_scripts": [
+  {
+   "matches": [
+    "https://chat.deepseek.com/*",
+    "https://*.deepseek.com/*"
+   ],
+   "js": [
+    "content.js"
+   ],
+   "css": [
+    "content.css"
+   ],
+   "run_at": "document_start"
   }
  ]
 }
