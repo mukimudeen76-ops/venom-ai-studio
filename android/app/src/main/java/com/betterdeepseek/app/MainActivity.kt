@@ -54,6 +54,8 @@ internal fun shouldOpenExternally(url: Uri, assetHost: String = "bds-asset.local
     if (host == assetHost.lowercase()) return false
     if (host == "deepseek.com" || host.endsWith(".deepseek.com")) return false
     if (host == "hcaptcha.com" || host.endsWith(".hcaptcha.com")) return false
+    // Odysseus / local server (Termux) — app ke andar hi khule, browser me nahi
+    if (host == "localhost" || host == "127.0.0.1" || host.endsWith(".local")) return false
 
     return true
 }
